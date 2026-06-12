@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Radiant Wave · Admin</title>
+  <style>
+    :root {
+      --bg: #0d121c; --panel: #151c2a; --panel-2: #1b2435; --line: rgba(255,255,255,.09);
+      --text: #e8eef6; --dim: #8aa0b8; --accent: #29b6e6; --cta: #ff8255; --good: #34d399; --bad: #f87171;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: radial-gradient(120% 80% at 50% -10%, #16203100, #0a0e16), var(--bg); color: var(--text);
+           font-family: "Segoe UI", system-ui, sans-serif; min-height: 100vh; }
+    a { color: var(--accent); }
+    h1,h2,h3 { font-weight: 700; letter-spacing: -.01em; }
+    .wrap { max-width: 1000px; margin: 0 auto; padding: 28px 20px 80px; }
+    header.top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand .dot { width: 36px; height: 36px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #7fe0ff, #29b6e6 60%, #155); box-shadow: 0 0 22px rgba(41,182,230,.6); }
+    .brand b { font-size: 18px; }
+    .brand span { color: var(--dim); font-size: 13px; display: block; }
+
+    .card { background: linear-gradient(180deg, var(--panel-2), var(--panel)); border: 1px solid var(--line);
+            border-radius: var(--radius); padding: 22px; margin-bottom: 20px; }
+    .card h2 { margin: 0 0 4px; font-size: 16px; }
+    .card .hint { color: var(--dim); font-size: 13px; margin: 0 0 18px; }
+
+    label { display: block; font-size: 13px; color: var(--dim); margin: 0 0 6px; }
+    input[type=text], input[type=url], input[type=number], input[type=password], textarea {
+      width: 100%; background: #0d1320; border: 1px solid var(--line); color: var(--text);
+      border-radius: 10px; padding: 11px 13px; font-size: 14px; font-family: inherit; }
+    input:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(41,182,230,.18); }
+    textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
+    .grid { display: grid; gap: 16px; }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .field { margin-bottom: 14px; }
+
+    .btn { border: 0; cursor: pointer; border-radius: 10px; padding: 11px 18px; font-size: 14px; font-weight: 600;
+           color: #fff; background: var(--accent); transition: filter .2s, transform .1s; }
+    .btn:hover { filter: brightness(1.08); }
+    .btn:active { transform: translateY(1px); }
+    .btn--cta { background: var(--cta); }
+    .btn--ghost { background: transparent; border: 1px solid var(--line); color: var(--text); }
+    .btn--sm { padding: 8px 12px; font-size: 13px; }
+    .btn--danger { background: #3a1d22; color: #ffb4b4; border: 1px solid #5b2a30; }
+    .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .spacer { flex: 1; }
+
+    .videos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .vid { background: #0d1320; border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+    .vid h3 { margin: 0 0 10px; font-size: 14px; }
+    .vid .status { font-size: 12px; margin-bottom: 12px; }
+    .pill { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+    .pill.on { background: rgba(52,211,153,.15); color: var(--good); }
+    .pill.off { background: rgba(248,113,113,.15); color: var(--bad); }
+    .vid video { width: 100%; border-radius: 8px; background: #000; margin-bottom: 10px; max-height: 120px; }
+    .uploadbar { height: 5px; background: #1f2a3d; border-radius: 999px; overflow: hidden; margin-top: 8px; display: none; }
+    .uploadbar > div { height: 100%; width: 0; background: var(--accent); transition: width .2s; }
+
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+    .stat { background: #0d1320; border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+    .stat .n { font-size: 26px; font-weight: 800; }
+    .stat .l { color: var(--dim); font-size: 12px; margin-top: 2px; }
+    .valgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 8px; }
+    .bar { display: flex; align-items: center; gap: 10px; margin: 7px 0; font-size: 13px; }
+    .bar .k { width: 92px; color: var(--dim); }
+    .bar .track { flex: 1; height: 8px; background: #1f2a3d; border-radius: 999px; overflow: hidden; }
+    .bar .track > div { height: 100%; background: linear-gradient(90deg, var(--accent), #7fe0ff); }
+    .bar .v { width: 32px; text-align: right; font-variant-numeric: tabular-nums; }
+
+    .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(20px);
+             background: #11304a; border: 1px solid var(--accent); color: #fff; padding: 12px 18px; border-radius: 10px;
+             opacity: 0; pointer-events: none; transition: .3s; font-size: 14px; z-index: 50; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.err { background: #3a1620; border-color: var(--bad); }
+
+    /* Login gate */
+    #gate { position: fixed; inset: 0; display: grid; place-items: center; background: var(--bg); z-index: 100; }
+    #gate .box { width: min(380px, 92vw); }
+    .hidden { display: none !important; }
+    .muted { color: var(--dim); font-size: 12px; }
+    fieldset { border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin: 0 0 14px; }
+    legend { padding: 0 8px; color: var(--dim); font-size: 12px; }
+  </style>
+</head>
+<body>
+  <!-- Login gate -->
+  <div id="gate">
+    <div class="card box">
+      <div class="brand" style="margin-bottom:18px">
+        <div class="dot"></div>
+        <div><b>Radiant Wave Admin</b><span>Restricted control panel</span></div>
+      </div>
+      <div class="field">
+        <label for="pw">Password</label>
+        <input id="pw" type="password" autocomplete="current-password" placeholder="Enter admin password" />
+      </div>
+      <button class="btn" id="login-btn" style="width:100%">Sign in</button>
+      <p class="muted" id="login-err" style="color:var(--bad);margin-top:10px"></p>
+      <p class="muted" style="margin-top:14px">Default password is <b>radiantwave</b> — change it below after signing in.</p>
+    </div>
+  </div>
+
+  <div class="wrap hidden" id="panel">
+    <header class="top">
+      <div class="brand">
+        <div class="dot"></div>
+        <div><b>Radiant Wave Admin</b><span>Interactive experience controls</span></div>
+      </div>
+      <div class="row">
+        <button class="btn btn--ghost btn--sm" id="open-exp">Open experience ↗</button>
+        <button class="btn btn--ghost btn--sm" id="logout">Sign out</button>
+      </div>
+    </header>
+
+    <!-- Video manager -->
+    <section class="card">
+      <h2>Video Manager</h2>
+      <p class="hint">Upload or replace the three experience videos. Files are stored as <code>video1/2/3.mp4</code> and take effect immediately.</p>
+      <div class="videos" id="videos"></div>
+    </section>
+
+    <!-- Timing controls -->
+    <section class="card">
+      <h2>Timing Controls</h2>
+      <p class="hint">Seconds after each video starts before its interactive element appears. e.g. 5 = 5s, 590 = 9m 50s.</p>
+      <div class="grid grid-3">
+        <div><label>Video 1 — Auto-advance at</label><input id="t1" type="number" min="0" step="1" /></div>
+        <div><label>Video 2 — Option cards</label><input id="t2" type="number" min="0" step="1" /></div>
+        <div><label>Video 3 — Final CTA</label><input id="t3" type="number" min="0" step="1" /></div>
+      </div>
+      <div class="row" style="margin-top:16px"><div class="spacer"></div><button class="btn" id="save-timings">Save timings</button></div>
+    </section>
+
+    <!-- Settings -->
+    <section class="card">
+      <h2>Settings</h2>
+      <p class="hint">GoHighLevel form embed and final redirect destination.</p>
+      <div class="field">
+        <label>GoHighLevel form embed code (iframe / script)</label>
+        <textarea id="ghl" rows="4" placeholder="Paste the GHL embed iframe here"></textarea>
+      </div>
+      <div class="field">
+        <label>Final redirect URL</label>
+        <input id="redirect" type="url" placeholder="https://rhema-wave-website.vercel.app/" />
+      </div>
+      <div class="row"><div class="spacer"></div><button class="btn" id="save-settings">Save settings</button></div>
+    </section>
+
+    <!-- Text controls -->
+    <section class="card">
+      <h2>Text Controls</h2>
+      <p class="hint">All user-facing copy. Saved to server config.</p>
+      <div id="text-fields" class="grid"></div>
+      <div class="row" style="margin-top:16px"><div class="spacer"></div><button class="btn" id="save-text">Save text</button></div>
+    </section>
+
+    <!-- Analytics -->
+    <section class="card">
+      <h2>Analytics</h2>
+      <p class="hint">Funnel performance. <button class="btn btn--ghost btn--sm" id="refresh-stats">Refresh</button></p>
+      <div class="stats" id="stats"></div>
+      <div class="valgrid">
+        <fieldset><legend>Q1 — Your own health valuation</legend><div id="val-q1"></div></fieldset>
+        <fieldset><legend>Q2 — Family valuation</legend><div id="val-q2"></div></fieldset>
+      </div>
+    </section>
+
+    <!-- Security -->
+    <section class="card">
+      <h2>Change Password</h2>
+      <div class="grid grid-2">
+        <div><label>Current password</label><input id="cur-pw" type="password" autocomplete="current-password" /></div>
+        <div><label>New password (min 6 chars)</label><input id="new-pw" type="password" autocomplete="new-password" /></div>
+      </div>
+      <div class="row" style="margin-top:14px"><div class="spacer"></div><button class="btn btn--cta" id="save-pw">Update password</button></div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+  (function () {
+    "use strict";
+    const $ = (s) => document.querySelector(s);
+    const api = (path, opts) => fetch(path, Object.assign({ headers: { "Content-Type": "application/json" } }, opts));
+
+    const TEXT_FIELDS = [
+      ["welcomeHeading", "Welcome heading", "input"],
+      ["welcomeBody", "Welcome body", "textarea"],
+      ["decisionHeading", "Decision heading", "input"],
+      ["option1", "Option 1 (disqualify)", "textarea"],
+      ["option2", "Option 2 (disqualify)", "textarea"],
+      ["option3", "Option 3 (qualify)", "textarea"],
+      ["disqualMessage", "Disqualification message", "textarea"],
+      ["congratsMessage", "Congratulations message", "textarea"],
+      ["valuationQ1", "Valuation question 1", "textarea"],
+      ["valuationQ2", "Valuation question 2", "textarea"],
+      ["video3Cta", "Video 3 — final CTA label", "input"],
+    ];
+
+    let toastTimer;
+    function toast(msg, isErr) {
+      const t = $("#toast");
+      t.textContent = msg;
+      t.classList.toggle("err", !!isErr);
+      t.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
+    }
+
+    // ---- auth ----
+    async function checkSession() {
+      try {
+        const r = await api("/api/admin/session");
+        const j = await r.json();
+        return j.authenticated;
+      } catch (_) { return false; }
+    }
+
+    async function login() {
+      const pw = $("#pw").value;
+      $("#login-err").textContent = "";
+      const r = await api("/api/admin/login", { method: "POST", body: JSON.stringify({ password: pw }) });
+      if (r.ok) { enterPanel(); }
+      else { const j = await r.json().catch(() => ({})); $("#login-err").textContent = j.error || "Login failed"; }
+    }
+
+    async function logout() {
+      await api("/api/admin/logout", { method: "POST" });
+      location.reload();
+    }
+
+    function enterPanel() {
+      $("#gate").classList.add("hidden");
+      $("#panel").classList.remove("hidden");
+      buildTextFields();
+      loadConfig();
+      loadVideos();
+      loadStats();
+    }
+
+    // ---- config ----
+    let CFG = null;
+    async function loadConfig() {
+      const r = await api("/api/admin/config");
+      if (!r.ok) return;
+      CFG = await r.json();
+      $("#t1").value = CFG.timings.video1Trigger;
+      $("#t2").value = CFG.timings.video2Trigger;
+      $("#t3").value = CFG.timings.video3Trigger;
+      $("#ghl").value = CFG.ghlEmbed || "";
+      $("#redirect").value = CFG.redirectUrl || "";
+      TEXT_FIELDS.forEach(([key]) => { const el = document.getElementById("tx-" + key); if (el) el.value = (CFG.text && CFG.text[key]) || ""; });
+    }
+
+    function buildTextFields() {
+      const wrap = $("#text-fields");
+      wrap.innerHTML = "";
+      TEXT_FIELDS.forEach(([key, label, kind]) => {
+        const div = document.createElement("div");
+        div.className = "field";
+        const tag = kind === "textarea" ? "textarea" : "input";
+        div.innerHTML = `<label>${label}</label><${tag} id="tx-${key}" ${kind === "input" ? 'type="text"' : 'rows="2"'}></${tag}>`;
+        wrap.appendChild(div);
+      });
+    }
+
+    async function saveConfig(partial, msg) {
+      const r = await api("/api/admin/config", { method: "PUT", body: JSON.stringify(partial) });
+      if (r.ok) toast(msg || "Saved");
+      else toast("Save failed", true);
+    }
+
+    function gatherText() {
+      const text = Object.assign({}, CFG ? CFG.text : {});
+      TEXT_FIELDS.forEach(([key]) => { const el = document.getElementById("tx-" + key); if (el) text[key] = el.value; });
+      return text;
+    }
+
+    // ---- videos ----
+    function loadVideos() {
+      const wrap = $("#videos");
+      wrap.innerHTML = "";
+      [1, 2, 3].forEach((n) => {
+        const exists = CFG && CFG.videos ? CFG.videos["v" + n] : false;
+        const div = document.createElement("div");
+        div.className = "vid";
+        div.innerHTML = `
+          <h3>Video ${n}</h3>
+          <div class="status"><span class="pill ${exists ? "on" : "off"}">${exists ? "Uploaded" : "Missing"}</span></div>
+          ${exists ? `<video src="/videos/video${n}.mp4?t=${Date.now()}" controls preload="metadata" muted></video>` : ""}
+          <div class="row">
+            <label class="btn btn--sm" style="cursor:pointer">Upload<input type="file" accept="video/mp4,video/*" hidden data-slot="${n}"></label>
+            ${exists ? `<button class="btn btn--sm btn--danger" data-del="${n}">Delete</button>` : ""}
+          </div>
+          <div class="uploadbar" data-bar="${n}"><div></div></div>`;
+        wrap.appendChild(div);
+      });
+      wrap.querySelectorAll('input[type=file]').forEach((inp) =>
+        inp.addEventListener("change", (e) => uploadVideo(e.target.getAttribute("data-slot"), e.target.files[0])));
+      wrap.querySelectorAll("[data-del]").forEach((b) =>
+        b.addEventListener("click", () => deleteVideo(b.getAttribute("data-del"))));
+    }
+
+    function uploadVideo(slot, file) {
+      if (!file) return;
+      const bar = document.querySelector(`[data-bar="${slot}"]`);
+      const fill = bar.firstElementChild;
+      bar.style.display = "block";
+      const fd = new FormData();
+      fd.append("video", file);
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", `/api/admin/video/${slot}`);
+      xhr.upload.onprogress = (e) => { if (e.lengthComputable) fill.style.width = (e.loaded / e.total * 100) + "%"; };
+      xhr.onload = () => {
+        bar.style.display = "none"; fill.style.width = "0";
+        if (xhr.status === 200) { toast(`Video ${slot} uploaded`); loadConfig().then(loadVideos); }
+        else toast(`Upload failed (${xhr.status})`, true);
+      };
+      xhr.onerror = () => { bar.style.display = "none"; toast("Upload error", true); };
+      xhr.send(fd);
+    }
+
+    async function deleteVideo(slot) {
+      if (!confirm(`Delete video ${slot}?`)) return;
+      const r = await api(`/api/admin/video/${slot}`, { method: "DELETE" });
+      if (r.ok) { toast(`Video ${slot} deleted`); await loadConfig(); loadVideos(); }
+      else toast("Delete failed", true);
+    }
+
+    // ---- analytics ----
+    async function loadStats() {
+      const r = await api("/api/admin/analytics");
+      if (!r.ok) return;
+      const a = await r.json();
+      const items = [
+        ["Registrations", a.registrations],
+        ["Video 1 complete", a.video1Completions],
+        ["Video 2 complete", a.video2Completions],
+        ["Video 3 complete", a.video3Completions],
+        ["Option 1", a.option1],
+        ["Option 2", a.option2],
+        ["Option 3", a.option3],
+        ["Qualified", a.qualificationCompletions],
+        ["Final CTA clicks", a.finalCtaClicks],
+      ];
+      $("#stats").innerHTML = items.map(([l, n]) => `<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join("");
+      renderVal("#val-q1", a.valuationQ1);
+      renderVal("#val-q2", a.valuationQ2);
+    }
+
+    function renderVal(sel, obj) {
+      const entries = Object.entries(obj || {});
+      const max = Math.max(1, ...entries.map(([, v]) => v));
+      $(sel).innerHTML = entries.map(([k, v]) =>
+        `<div class="bar"><span class="k">${k}</span><span class="track"><div style="width:${(v / max) * 100}%"></div></span><span class="v">${v}</span></div>`
+      ).join("");
+    }
+
+    // ---- wire ----
+    $("#login-btn").addEventListener("click", login);
+    $("#pw").addEventListener("keydown", (e) => { if (e.key === "Enter") login(); });
+    $("#logout").addEventListener("click", logout);
+    $("#open-exp").addEventListener("click", () => window.open("/", "_blank"));
+    $("#refresh-stats").addEventListener("click", loadStats);
+
+    $("#save-timings").addEventListener("click", () => saveConfig({
+      timings: { video1Trigger: +$("#t1").value || 0, video2Trigger: +$("#t2").value || 0, video3Trigger: +$("#t3").value || 0 }
+    }, "Timings saved"));
+
+    $("#save-settings").addEventListener("click", () => saveConfig({
+      ghlEmbed: $("#ghl").value, redirectUrl: $("#redirect").value
+    }, "Settings saved"));
+
+    $("#save-text").addEventListener("click", () => saveConfig({ text: gatherText() }, "Text saved"));
+
+    $("#save-pw").addEventListener("click", async () => {
+      const r = await api("/api/admin/password", { method: "POST", body: JSON.stringify({ current: $("#cur-pw").value, next: $("#new-pw").value }) });
+      if (r.ok) { toast("Password updated"); $("#cur-pw").value = ""; $("#new-pw").value = ""; }
+      else { const j = await r.json().catch(() => ({})); toast(j.error || "Update failed", true); }
+    });
+
+    // ---- boot ----
+    checkSession().then((ok) => { if (ok) enterPanel(); });
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+# Build output
+bin/
+obj/
+
+# Runtime data (config, analytics, server logs) — regenerated on first run
+Data/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+.vs/
+*.user
+*.suo

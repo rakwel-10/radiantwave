@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>RadiantWave</RootNamespace>
+    <!-- Self-contained on the shared framework only: no external NuGet packages required. -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Keep runtime data + uploaded videos out of the build/watch graph. -->
+    <Content Remove="Data\**" />
+    <None Include="Data\**" CopyToOutputDirectory="Never" />
+  </ItemGroup>
+
+</Project>
