@@ -69,6 +69,9 @@ For a **free** public link (Cloudflare Pages / Netlify, no credit card) where th
 visitor experience + GoHighLevel lead form work — but the admin panel & analytics
 do not — deploy as a static site. Config is baked into `wwwroot/js/config.js`.
 
+**Vercel:** New Project from the GitHub repo. `vercel.json` already sets the build
+(assembles `wwwroot` + `videos` into `dist/`, clean URLs). Deploy.
+
 **Netlify:** New site from the GitHub repo. `netlify.toml` already sets the build
 (assembles `wwwroot` + `videos` into `dist/`). Deploy.
 
