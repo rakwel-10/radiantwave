@@ -15,6 +15,11 @@ using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Honor the port assigned by the host (Render/Railway/etc. set $PORT).
+var port = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrEmpty(port))
+    builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+
 // Allow large video uploads (production videos can be big).
 builder.WebHost.ConfigureKestrel(o => o.Limits.MaxRequestBodySize = 4L * 1024 * 1024 * 1024); // 4 GB
 builder.Services.Configure<FormOptions>(o =>
@@ -26,11 +31,26 @@ builder.Services.Configure<FormOptions>(o =>
 var app = builder.Build();
 
 var contentRoot = app.Environment.ContentRootPath;
-var dataDir = Path.Combine(contentRoot, "Data");
-var videosDir = Path.Combine(contentRoot, "videos");
+// Data + videos can live on a persistent disk (set RW_DATA_DIR / RW_VIDEOS_DIR
+// to the mount path in production). Defaults keep everything under the app dir.
+var dataDir = Environment.GetEnvironmentVariable("RW_DATA_DIR") ?? Path.Combine(contentRoot, "Data");
+var videosDir = Environment.GetEnvironmentVariable("RW_VIDEOS_DIR") ?? Path.Combine(contentRoot, "videos");
 var adminUiDir = Path.Combine(contentRoot, "AdminUi");
 Directory.CreateDirectory(dataDir);
 Directory.CreateDirectory(videosDir);
+
+// Seed placeholder videos into an empty (persistent) videos dir on first boot,
+// without overwriting any the admin has uploaded.
+var seedDir = Path.Combine(contentRoot, "seed-videos");
+if (Directory.Exists(seedDir))
+{
+    foreach (var n in new[] { 1, 2, 3 })
+    {
+        var dst = Path.Combine(videosDir, $"video{n}.mp4");
+        var src = Path.Combine(seedDir, $"video{n}.mp4");
+        if (!File.Exists(dst) && File.Exists(src)) File.Copy(src, dst);
+    }
+}
 
 var store = new Store(Path.Combine(dataDir, "config.json"), Path.Combine(dataDir, "events.json"));
 

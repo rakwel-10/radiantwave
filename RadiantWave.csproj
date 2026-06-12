@@ -12,6 +12,8 @@
     <!-- Keep runtime data + uploaded videos out of the build/watch graph. -->
     <Content Remove="Data\**" />
     <None Include="Data\**" CopyToOutputDirectory="Never" />
+    <!-- Ship the hidden admin UI (served from outside wwwroot) with publish. -->
+    <Content Include="AdminUi\**" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

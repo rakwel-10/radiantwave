@@ -36,6 +36,33 @@ the admin panel after first sign-in.
 
 ---
 
+## Deploy to Render
+
+This repo ships a `Dockerfile` and a `render.yaml` Blueprint.
+
+1. Push to GitHub (already done).
+2. In Render → **New → Blueprint**, connect this repo. Render reads `render.yaml`
+   and provisions a Docker web service with a **1 GB persistent disk** mounted at
+   `/var/rwdata` (for uploaded videos + config/analytics).
+3. Deploy. Your experience is at `https://<service>.onrender.com/`, the admin at
+   `https://<service>.onrender.com/rw-control-92x`.
+
+**Notes**
+- The persistent disk requires a **paid instance** (Starter, ~$7/mo). To use the
+  **Free** plan, set `plan: free` and remove the `disk:` block in `render.yaml` —
+  but uploads/analytics will reset on every restart.
+- The app binds to the host's `$PORT` automatically.
+- `RW_DATA_DIR` / `RW_VIDEOS_DIR` point storage at the persistent disk. On first
+  boot the bundled placeholder videos seed the (empty) videos folder; uploads
+  made via the admin panel are never overwritten.
+- After deploy: open the admin panel and **change the default password**. Update
+  the GHL form's *On Submit → Redirect URL* to `https://<service>.onrender.com/continue`.
+
+Any other Docker host (Railway, Fly.io, a VPS) works too — just build the
+`Dockerfile` and provide a persistent volume for `RW_DATA_DIR` / `RW_VIDEOS_DIR`.
+
+---
+
 ## How it works
 
 - **Single page, no reloads.** All states are `<section data-screen>` blocks toggled

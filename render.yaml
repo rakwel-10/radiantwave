@@ -1,0 +1,26 @@
+# Render Blueprint — deploys Radiant Wave as a Docker web service with a
+# persistent disk for uploaded videos + config/analytics.
+#
+# Persistence (the disk below) requires a paid instance (Starter, ~$7/mo).
+# To run on the Free plan instead: set `plan: free` and delete the `disk:`
+# block — note that uploads/analytics then reset whenever the service restarts.
+services:
+  - type: web
+    name: radiantwave
+    runtime: docker
+    plan: starter
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/config
+    autoDeploy: true
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: RW_DATA_DIR
+        value: /var/rwdata/Data
+      - key: RW_VIDEOS_DIR
+        value: /var/rwdata/videos
+    disk:
+      name: rw-persist
+      mountPath: /var/rwdata
+      sizeGB: 1
