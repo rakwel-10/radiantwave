@@ -1,0 +1,15 @@
+# Static deploy (no backend) for Netlify / Cloudflare Pages.
+# Assembles the publish folder from wwwroot + the videos folder, since the
+# experience serves videos from /videos. The baked-in /js/config.js supplies
+# the config (GHL form, text, timings, redirect) so no server is needed.
+#
+# Cloudflare Pages: use the same Build command and set Build output = "dist".
+[build]
+  command = "rm -rf dist && mkdir -p dist && cp -R wwwroot/. dist/ && cp -R videos dist/videos"
+  publish = "dist"
+
+# Serve the breakout page at the clean /continue path (GHL redirect target).
+[[redirects]]
+  from = "/continue"
+  to = "/continue.html"
+  status = 200

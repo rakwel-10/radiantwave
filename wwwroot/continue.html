@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Continuing…</title>
+  <style>
+    html,body{margin:0;height:100%;background:#0b0712;color:#a7b0d6;
+      font-family:system-ui,-apple-system,sans-serif;display:grid;place-items:center}
+    .x{display:flex;flex-direction:column;align-items:center;gap:16px;font-size:14px;letter-spacing:.04em}
+    .p{width:54px;height:54px;border-radius:50%;
+      background:radial-gradient(circle,rgba(74,166,255,.85),transparent 70%);
+      animation:pulse 1.5s ease-in-out infinite}
+    @keyframes pulse{0%,100%{transform:scale(.9);opacity:.7}50%{transform:scale(1.1);opacity:1}}
+  </style>
+</head>
+<body>
+  <div class="x"><div class="p"></div><div>Unlocking your experience…</div></div>
+  <script>
+    (function () {
+      var target = "/?begin=1";
+      try {
+        if (window.top && window.top !== window.self) window.top.location.replace(target);
+        else window.location.replace(target);
+      } catch (e) { window.location.replace(target); }
+    })();
+  </script>
+</body>
+</html>

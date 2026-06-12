@@ -328,9 +328,11 @@
     let cfg;
     try {
       const res = await fetch("/api/config", { cache: "no-store" });
+      if (!res.ok) throw new Error("no backend");
       cfg = await res.json();
     } catch (_) {
-      cfg = { timings: { video1Trigger: 5, video2Trigger: 7, video3Trigger: 5 }, text: {}, ghlEmbed: "", redirectUrl: "https://rhema-wave-website.vercel.app/" };
+      // No backend (static deploy) → use the baked-in config.
+      cfg = window.RW_STATIC_CONFIG || { timings: { video1Trigger: 5, video2Trigger: 7, video3Trigger: 5 }, text: {}, ghlEmbed: "", redirectUrl: "https://rhema-wave-website.vercel.app/" };
     }
     App.config = cfg;
 

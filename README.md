@@ -63,6 +63,29 @@ Any other Docker host (Railway, Fly.io, a VPS) works too — just build the
 
 ---
 
+## Free static display (no backend)
+
+For a **free** public link (Cloudflare Pages / Netlify, no credit card) where the
+visitor experience + GoHighLevel lead form work — but the admin panel & analytics
+do not — deploy as a static site. Config is baked into `wwwroot/js/config.js`.
+
+**Netlify:** New site from the GitHub repo. `netlify.toml` already sets the build
+(assembles `wwwroot` + `videos` into `dist/`). Deploy.
+
+**Cloudflare Pages:** New project from the repo, Framework preset = None, and set:
+- Build command: `rm -rf dist && mkdir -p dist && cp -R wwwroot/. dist/ && cp -R videos dist/videos`
+- Build output directory: `dist`
+
+After deploy, set the GHL form's **On Submit → Redirect URL** to
+`https://<your-site>/continue`. To change videos/text/timings on a static deploy,
+edit `wwwroot/js/config.js` (and the files in `videos/`) and redeploy.
+
+> The same `wwwroot` powers both modes: when the .NET backend is present,
+> `/api/config` wins and `config.js` is ignored; with no backend, `config.js`
+> supplies everything.
+
+---
+
 ## How it works
 
 - **Single page, no reloads.** All states are `<section data-screen>` blocks toggled

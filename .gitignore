@@ -2,6 +2,9 @@
 bin/
 obj/
 
+# Static deploy build artifact (assembled by the host build command)
+dist/
+
 # Runtime data (config, analytics, server logs) — regenerated on first run
 Data/
 
