@@ -16,9 +16,10 @@
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // soft glow + low opacity so the 3D floor sits gently behind text
-  canvas.style.filter = "blur(3px)";
-  canvas.style.opacity = "0.55";
+  // heavy blur → the 3D floor melts into a calm, soft colour glow (no busy
+  // motion to cause dizziness) while keeping the perspective depth underneath.
+  canvas.style.filter = "blur(44px) saturate(125%)";
+  canvas.style.opacity = "0.5";
 
   const state = {
     w: 0, h: 0,
@@ -51,7 +52,7 @@
 
   function frame() {
     state.intensity += (state.targetIntensity - state.intensity) * 0.04;
-    state.t += reduceMotion ? 0.004 : 0.018;
+    state.t += reduceMotion ? 0.003 : 0.009; // slow, calm drift
     const t = state.t;
     const { w, h, cols, rows } = state;
     const I = state.intensity;

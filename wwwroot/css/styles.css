@@ -23,6 +23,7 @@
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --shadow-glow: 0 0 40px rgba(41, 182, 230, 0.25);
   --font: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --display: "Fraunces", "Plus Jakarta Sans", Georgia, serif;
   --maxw: 1400px;
 }
 
@@ -97,6 +98,18 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
   height: 100%;
   z-index: 1;
   display: block;
+}
+
+/* Film-grain texture for premium depth */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
 }
 
 .vignette {
@@ -241,8 +254,12 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
 }
 
 .welcome__heading {
-  font-size: clamp(26px, 4.2vw, 42px);
-  line-height: 1.1;
+  font-family: var(--display);
+  font-optical-sizing: auto;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  font-size: clamp(34px, 5vw, 58px);
+  line-height: 1.04;
   margin: 0;
   background: linear-gradient(180deg, #ffffff 30%, #cfe9f5);
   -webkit-background-clip: text;
@@ -388,9 +405,13 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
   margin-bottom: 12px;
 }
 .teaser__title {
-  font-size: clamp(30px, 5vw, 52px);
-  line-height: 1.05;
-  margin: 0 0 18px;
+  font-family: var(--display);
+  font-optical-sizing: auto;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  font-size: clamp(36px, 5.6vw, 64px);
+  line-height: 1.0;
+  margin: 0 0 20px;
   background: linear-gradient(180deg, #fff 30%, #cfe9f5);
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
@@ -679,7 +700,11 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
   border: 1px solid rgba(255, 130, 85, 0.35);
 }
 .qualify__title {
-  font-size: clamp(26px, 3.4vw, 38px);
+  font-family: var(--display);
+  font-optical-sizing: auto;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  font-size: clamp(32px, 4vw, 46px);
   margin: 4px 0 0;
   background: linear-gradient(180deg, #fff, #ffd9c6);
   -webkit-background-clip: text; background-clip: text; color: transparent;
