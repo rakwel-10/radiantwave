@@ -117,21 +117,17 @@
 
   // ---- state entries ----------------------------------------
   function startVideo1() {
-    transitionTo("video1", () => {
-      tryPlay(App.players.v1);
-      preload(videoUrl(2));
-    });
+    // Show the teaser (description + video). The user presses play to begin.
+    transitionTo("video1", () => preload(videoUrl(2)));
   }
 
-  // Resume directly at Video 1 (used when arriving via the GHL post-submit
-  // redirect). Switches screens without the welcome flash; the loader still
-  // covers the swap for a clean reveal.
-  function jumpToVideo1Immediate(deferPlay) {
+  // Resume directly at the teaser (used when arriving via the GHL post-submit
+  // redirect). Switches screens without the welcome flash.
+  function jumpToVideo1Immediate() {
     const cur = $(".screen--active");
     if (cur) cur.classList.remove("screen--active");
     const v1 = $('[data-screen="video1"]');
     if (v1) v1.classList.add("screen--active");
-    if (!deferPlay) tryPlay(App.players.v1);
     preload(videoUrl(2));
   }
 
@@ -198,6 +194,10 @@
 
   // ---- wire interactions ------------------------------------
   function wire() {
+    // Teaser: expand the video to fill once the user presses play.
+    const teaser = $("#teaser");
+    App.players.v1.video.addEventListener("play", () => { if (teaser) teaser.classList.add("is-expanded"); });
+
     // Video 1: auto-advance to Video 2 at the trigger (loader covers it).
     App.players.v1.onTrigger(App.config.timings.video1Trigger, () => { App.players.v1.pause(); enterVideo2(); });
 
@@ -354,13 +354,10 @@
     if (resuming) {
       const label = loader.querySelector(".loader__label");
       if (label) label.textContent = "Energizing…";
-      App.startExperience && App.startExperience({ immediate: true, deferPlay: true });
+      App.startExperience && App.startExperience({ immediate: true });
       history.replaceState(null, "", location.pathname); // clean the URL
-      // Hold the intentional 3-second loader, then reveal Video 1 and play.
-      setTimeout(() => {
-        loader.classList.add("is-hidden");
-        if (App.players.v1) tryPlay(App.players.v1);
-      }, 3000);
+      // Hold the intentional 3-second loader, then reveal the teaser.
+      setTimeout(() => loader.classList.add("is-hidden"), 3000);
     } else {
       setTimeout(() => loader.classList.add("is-hidden"), 350);
     }
