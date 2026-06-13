@@ -54,6 +54,19 @@ if (Directory.Exists(seedDir))
 
 var store = new Store(Path.Combine(dataDir, "config.json"), Path.Combine(dataDir, "events.json"));
 
+// ---- Clean URLs: serve /home as /home.html etc. (parity with Vercel) -------
+var webRoot = app.Environment.WebRootPath ?? Path.Combine(contentRoot, "wwwroot");
+app.Use(async (ctx, next) =>
+{
+    var path = ctx.Request.Path.Value;
+    if (!string.IsNullOrEmpty(path) && path != "/" && !Path.HasExtension(path))
+    {
+        var rel = path.TrimStart('/').Replace('/', Path.DirectorySeparatorChar) + ".html";
+        if (File.Exists(Path.Combine(webRoot, rel))) ctx.Request.Path = path + ".html";
+    }
+    await next();
+});
+
 // ---- Static file serving --------------------------------------------------
 app.UseDefaultFiles();
 app.UseStaticFiles();
@@ -488,7 +501,7 @@ class AppConfig
         </iframe>
         <script src="https://link.sillabledigital.com/js/form_embed.js"></script>
         """;
-    public string RedirectUrl { get; set; } = "https://rhema-wave-website.vercel.app/";
+    public string RedirectUrl { get; set; } = "/home";
     public string AdminPasswordHash { get; set; } = "";
 
     public static AppConfig CreateDefault() => new();

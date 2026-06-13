@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Journal — Radiant Wave Technologies</title>
+  <meta name="description" content="Field notes & future frequencies — essays, studies, and curated rituals from Radiant Wave Technologies." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/site.css" />
+</head>
+<body>
+  <div class="bg-blobs" aria-hidden="true"><span class="blob blob--1"></span><span class="blob blob--2"></span><span class="blob blob--3"></span><span class="blob blob--4"></span></div>
+  <canvas id="wave-canvas" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-nav">
+    <a class="brand" href="/home">
+      <img src="/assets/logo.svg" alt="Radiant Wave Technologies" onerror="this.onerror=null;this.src='/assets/logo.png';" />
+      <span>Radiant Wave<small>Technologies</small></span>
+    </a>
+    <nav class="nav-links">
+      <a href="/home">Home</a><a href="/science">The Science</a><a href="/experience">The Experience</a><a href="/about">About</a><a href="/journal">Journal</a><a href="/contact">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn--cta" href="/contact">Begin Your Journey</a>
+      <button class="nav-toggle" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" style="padding-bottom:0">
+      <div class="wrap">
+        <span class="eyebrow hero__eyebrow reveal-up">Field Notes &amp; Future Frequencies</span>
+        <h1 class="reveal-up">Journal</h1>
+        <p class="hero__sub reveal-up">Essays, studies, and curated rituals.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="glass coming reveal-up">
+          <span class="eyebrow" style="justify-content:center">In Production</span>
+          <h2 style="margin-top:16px">Coming Soon</h2>
+          <p>Our journal is in production. Subscribe to receive the first release of bioelectric research, interviews, and immersive wellness stories.</p>
+          <form class="subscribe" data-ack="You're on the list — we'll notify you at the first release.">
+            <div class="field" style="flex:1"><input type="email" placeholder="Your email" required aria-label="Email" /></div>
+            <button class="btn btn--cta" type="submit">Notify Me</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
+    <div class="wrap">
+      <a class="brand" href="/home"><img src="/assets/logo.svg" alt="" onerror="this.onerror=null;this.src='/assets/logo.png';" /><span>Radiant Wave<small>Technologies</small></span></a>
+      <nav class="foot-links"><a href="/science">The Science</a><a href="/experience">The Experience</a><a href="/about">About</a><a href="/journal">Journal</a><a href="/contact">Contact</a></nav>
+      <p class="copy">© 2026 Radiant Wave Technologies. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/waves.js"></script>
+  <script src="/js/site.js"></script>
+</body>
+</html>
