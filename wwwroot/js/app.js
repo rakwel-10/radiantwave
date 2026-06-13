@@ -112,8 +112,8 @@
 
   // ---- state entries ----------------------------------------
   function startVideo1() {
-    // Show the teaser (description + video). The user presses play to begin.
-    transitionTo("video1", () => preload(videoUrl(2)));
+    // Show the teaser; the video plays a silent looping preview to entice.
+    transitionTo("video1", () => { App.players.v1.preview(5); preload(videoUrl(2)); });
   }
 
   // Resume directly at the teaser (used when arriving via the GHL post-submit
@@ -123,14 +123,16 @@
     if (cur) cur.classList.remove("screen--active");
     const v1 = $('[data-screen="video1"]');
     if (v1) v1.classList.add("screen--active");
+    App.players.v1.preview(5);
     preload(videoUrl(2));
   }
 
   function enterVideo2() {
     track("video1_complete");
-    // Video 2 shows the "The Why" teaser — user presses play (no autoplay).
+    // Video 2 shows the "The Why" teaser with a silent looping preview.
     transitionTo("video2", () => {
       App.players.v1.pause();
+      App.players.v2.preview(5);
       preload(videoUrl(3));
     });
   }
@@ -174,8 +176,8 @@
     document.body.classList.add("atmo-energized");
     if (window.RadiantWaves) window.RadiantWaves.setIntensity(1.7);
 
-    // Video 3 shows the "The Synergistic Epiphany" teaser — user presses play.
-    transitionTo("video3");
+    // Video 3 shows the "The Synergistic Epiphany" teaser with a silent preview.
+    transitionTo("video3", () => App.players.v3.preview(5));
   }
 
   function finalRedirect() {
@@ -201,7 +203,8 @@
     [App.players.v1, App.players.v2, App.players.v3].forEach((p) => {
       const section = p.video.closest("[data-screen]");
       const t = section ? section.querySelector(".teaser") : null;
-      p.video.addEventListener("play", () => { if (t) t.classList.add("is-expanded"); });
+      // Expand only when the user clicks through from the muted preview.
+      p.onRealPlay(() => { if (t) t.classList.add("is-expanded"); });
     });
 
     // Video 1: at the trigger, reveal the "Next Video: The Why" button.

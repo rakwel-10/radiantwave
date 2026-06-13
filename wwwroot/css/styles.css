@@ -573,6 +573,27 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
 .rw-player__bigplay:hover span { transform: scale(1.08); }
 .rw-player.is-playing .rw-player__bigplay { opacity: 0; pointer-events: none; transition: opacity 0.4s; }
 
+/* Muted preview: video loops silently, play button stays visible + pulses */
+.rw-player.is-preview .rw-player__bigplay { opacity: 1 !important; pointer-events: auto; }
+.rw-player.is-preview .rw-player__bigplay span { animation: haloPulse 2s var(--ease) infinite; }
+.rw-player.is-preview .rw-player__controls { opacity: 0 !important; pointer-events: none; }
+.rw-player.is-preview .rw-player__video { cursor: pointer; }
+.rw-player.is-preview::after {
+  content: "Preview · tap to play with sound";
+  position: absolute;
+  left: 50%; bottom: 16px;
+  transform: translateX(-50%);
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(8, 10, 20, 0.5);
+  padding: 6px 14px;
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+}
+
 /* ---------------- Reveal (time-triggered) ---------------- */
 .reveal {
   opacity: 0;

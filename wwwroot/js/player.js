@@ -30,6 +30,9 @@
       this._triggerAt = Infinity;
       this._onEnded = null;
       this._endedFired = false;
+      this.previewing = false;
+      this._previewLimit = 5;
+      this._onRealPlay = null;
       this._build();
     }
 
@@ -69,7 +72,11 @@
     }
 
     _wire() {
-      const toggle = () => (this.video.paused ? this.play() : this.pause());
+      // While in muted-preview mode, any click starts real (un-muted) playback.
+      const toggle = () => {
+        if (this.previewing) { this._beginReal(); return; }
+        this.video.paused ? this.play() : this.pause();
+      };
       this.bigplay.addEventListener("click", toggle);
       this.playBtn.addEventListener("click", toggle);
       this.video.addEventListener("click", toggle);
@@ -124,8 +131,15 @@
     }
 
     _tick() {
-      const d = this.video.duration;
       const c = this.video.currentTime;
+
+      // Muted teaser preview: loop the first few seconds, no trigger.
+      if (this.previewing) {
+        if (c >= this._previewLimit) { try { this.video.currentTime = 0; } catch (_) {} }
+        return;
+      }
+
+      const d = this.video.duration;
       if (isFinite(d) && d > 0) {
         const pct = (c / d) * 100;
         this.fill.style.width = pct + "%";
@@ -162,6 +176,35 @@
     }
 
     onEnded(cb) { this._onEnded = cb; this._endedFired = false; return this; }
+
+    /** Start a silent, looping teaser preview of the first `seconds`. */
+    preview(seconds) {
+      this.previewing = true;
+      this._previewLimit = Number(seconds) || 5;
+      this.triggerFired = false;
+      this.video.muted = true;
+      this.video.loop = false;
+      this.root.classList.add("is-preview");
+      try { this.video.currentTime = 0; } catch (_) {}
+      const p = this.video.play();
+      if (p && p.catch) p.catch(() => {});
+      return this;
+    }
+
+    /** Exit preview → real playback with sound, from the start. */
+    _beginReal() {
+      this.previewing = false;
+      this.root.classList.remove("is-preview");
+      this.video.muted = false;
+      this.triggerFired = false;
+      try { this.video.currentTime = 0; } catch (_) {}
+      const p = this.video.play();
+      if (p && p.catch) p.catch(() => {});
+      if (this._onRealPlay) this._onRealPlay();
+    }
+
+    /** Called when the user clicks to really watch (from preview). */
+    onRealPlay(cb) { this._onRealPlay = cb; return this; }
 
     play() { const p = this.video.play(); if (p && p.catch) p.catch(() => {}); }
     pause() { this.video.pause(); }
