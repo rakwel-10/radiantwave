@@ -133,9 +133,9 @@
 
   function enterVideo2() {
     track("video1_complete");
+    // Video 2 shows the "The Why" teaser — user presses play (no autoplay).
     transitionTo("video2", () => {
       App.players.v1.pause();
-      tryPlay(App.players.v2);
       preload(videoUrl(3));
     });
   }
@@ -194,12 +194,17 @@
 
   // ---- wire interactions ------------------------------------
   function wire() {
-    // Teaser: expand the video to fill once the user presses play.
-    const teaser = $("#teaser");
-    App.players.v1.video.addEventListener("play", () => { if (teaser) teaser.classList.add("is-expanded"); });
+    // Teasers (video1 + video2): expand the video to fill once the user
+    // presses play, hiding the description.
+    [App.players.v1, App.players.v2].forEach((p) => {
+      const section = p.video.closest("[data-screen]");
+      const t = section ? section.querySelector(".teaser") : null;
+      p.video.addEventListener("play", () => { if (t) t.classList.add("is-expanded"); });
+    });
 
-    // Video 1: auto-advance to Video 2 at the trigger (loader covers it).
-    App.players.v1.onTrigger(App.config.timings.video1Trigger, () => { App.players.v1.pause(); enterVideo2(); });
+    // Video 1: at the trigger, reveal the "Next Video: The Why" button.
+    App.players.v1.onTrigger(App.config.timings.video1Trigger, () => { App.players.v1.pause(); showReveal("video1-next"); });
+    $("#video1-next").addEventListener("click", enterVideo2);
 
     // Video 2 trigger -> reveal decision
     App.players.v2.onTrigger(App.config.timings.video2Trigger, () => { App.players.v2.pause(); showReveal("decision"); });

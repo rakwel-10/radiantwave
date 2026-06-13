@@ -58,7 +58,7 @@
 
     <!-- ============================ VIDEO 1 ============================ -->
     <section class="screen" data-screen="video1">
-      <div class="teaser" id="teaser">
+      <div class="teaser" id="teaser-1">
         <div class="teaser__info">
           <span class="teaser__eyebrow">Chapter One</span>
           <h2 class="teaser__title">The What</h2>
@@ -76,35 +76,48 @@
           <p class="teaser__hint">Press play to begin</p>
         </div>
       </div>
+      <div class="reveal video-overlay" data-reveal="video1-next">
+        <button id="video1-next" class="btn btn--cta btn--xl ripple" type="button">Next Video: The Why</button>
+      </div>
     </section>
 
-    <!-- ============================ VIDEO 2 + DECISION ============================ -->
+    <!-- ============================ VIDEO 2 (The Why) + DECISION ============================ -->
     <section class="screen" data-screen="video2">
-      <div class="video-stage">
-        <div class="player-frame">
-          <div class="player-mount" id="mount-2"></div>
-
-          <div class="reveal video-overlay video-overlay--wide decision" data-reveal="decision">
-            <div class="decision__panel">
-              <h2 class="decision__heading" data-text="decisionHeading">Please choose which of the following is most appealing to you:</h2>
-              <div class="cards cards--3">
-                <button class="card" type="button" data-option="1">
-                  <span class="card__index">01</span>
-                  <span class="card__text" data-text="option1"></span>
-                  <span class="card__glow" aria-hidden="true"></span>
-                </button>
-                <button class="card" type="button" data-option="2">
-                  <span class="card__index">02</span>
-                  <span class="card__text" data-text="option2"></span>
-                  <span class="card__glow" aria-hidden="true"></span>
-                </button>
-                <button class="card" type="button" data-option="3">
-                  <span class="card__index">03</span>
-                  <span class="card__text" data-text="option3"></span>
-                  <span class="card__glow" aria-hidden="true"></span>
-                </button>
-              </div>
-            </div>
+      <div class="teaser" id="teaser-2">
+        <div class="teaser__info">
+          <span class="teaser__eyebrow">Chapter Two</span>
+          <h2 class="teaser__title">The Why</h2>
+          <div class="teaser__desc">
+            <p>The human body was designed to thrive&mdash;but the modern world has become a toxic trap.</p>
+            <p>Every single day, your body is bombarded by an inescapable cocktail of air pollution, chemical-laden food, heavy metals, and 24/7 radiation from billions of cell phones. This toxic overload triggers a destructive chain reaction inside you, creating &ldquo;Free Radicals&rdquo; that physically damage your DNA and cause cellular death. When these cells die, your body loses its ability to produce electricity, draining your immune system and accelerating aging.</p>
+          </div>
+        </div>
+        <div class="teaser__media">
+          <div class="player-frame">
+            <div class="player-mount" id="mount-2"></div>
+          </div>
+          <p class="teaser__hint">Press play to continue</p>
+        </div>
+      </div>
+      <div class="reveal video-overlay video-overlay--wide decision" data-reveal="decision">
+        <div class="decision__panel">
+          <h2 class="decision__heading" data-text="decisionHeading">Please choose which of the following is most appealing to you:</h2>
+          <div class="cards cards--3">
+            <button class="card" type="button" data-option="1">
+              <span class="card__index">01</span>
+              <span class="card__text" data-text="option1"></span>
+              <span class="card__glow" aria-hidden="true"></span>
+            </button>
+            <button class="card" type="button" data-option="2">
+              <span class="card__index">02</span>
+              <span class="card__text" data-text="option2"></span>
+              <span class="card__glow" aria-hidden="true"></span>
+            </button>
+            <button class="card" type="button" data-option="3">
+              <span class="card__index">03</span>
+              <span class="card__text" data-text="option3"></span>
+              <span class="card__glow" aria-hidden="true"></span>
+            </button>
           </div>
         </div>
       </div>
