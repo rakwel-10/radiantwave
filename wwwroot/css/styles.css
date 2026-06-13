@@ -889,14 +889,14 @@ body.atmo-energized .vignette { background: radial-gradient(90% 70% at 50% 110%,
   .cards--4 { grid-template-columns: repeat(2, 1fr); }
   .card { min-height: auto; }
 
-  /* Welcome collapses to a single centred column. */
+  /* Welcome collapses to a single column, kept left-aligned. */
   .welcome--split {
     grid-template-columns: 1fr;
     width: min(560px, 100%);
     gap: 24px;
   }
-  .welcome__intro { align-items: center; text-align: center; }
-  .welcome__intro .welcome__body { margin: 0 auto; }
+  .welcome__intro { align-items: flex-start; text-align: left; }
+  .welcome__intro .welcome__body { margin: 0; }
 
   /* Overlays may need to scroll on short players — keep content readable. */
   .video-overlay { justify-content: flex-start; }
