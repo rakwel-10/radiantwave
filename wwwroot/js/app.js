@@ -110,11 +110,6 @@
     return p;
   }
 
-  function tryPlay(player) {
-    // Attempt autoplay; if blocked, the big play button remains for the user.
-    setTimeout(() => player.play(), 120);
-  }
-
   // ---- state entries ----------------------------------------
   function startVideo1() {
     // Show the teaser (description + video). The user presses play to begin.
@@ -179,7 +174,8 @@
     document.body.classList.add("atmo-energized");
     if (window.RadiantWaves) window.RadiantWaves.setIntensity(1.7);
 
-    transitionTo("video3", () => tryPlay(App.players.v3));
+    // Video 3 shows the "The Synergistic Epiphany" teaser — user presses play.
+    transitionTo("video3");
   }
 
   function finalRedirect() {
@@ -196,7 +192,7 @@
   function wire() {
     // Teasers (video1 + video2): expand the video to fill once the user
     // presses play, hiding the description.
-    [App.players.v1, App.players.v2].forEach((p) => {
+    [App.players.v1, App.players.v2, App.players.v3].forEach((p) => {
       const section = p.video.closest("[data-screen]");
       const t = section ? section.querySelector(".teaser") : null;
       p.video.addEventListener("play", () => { if (t) t.classList.add("is-expanded"); });
