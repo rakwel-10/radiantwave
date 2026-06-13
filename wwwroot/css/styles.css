@@ -23,7 +23,7 @@
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --shadow-glow: 0 0 40px rgba(41, 182, 230, 0.25);
   --font: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
-  --maxw: 1080px;
+  --maxw: 1400px;
 }
 
 * { box-sizing: border-box; }
@@ -178,7 +178,7 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
   grid-template-columns: 1.05fr 1fr;
   align-items: center;
   gap: clamp(28px, 5vw, 68px);
-  width: min(1120px, 100%);
+  width: min(1400px, 100%);
 }
 .welcome__intro {
   display: flex;
@@ -369,7 +369,7 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
   grid-template-columns: 1fr 1.15fr;
   gap: clamp(26px, 4vw, 60px);
   align-items: center;
-  width: min(1160px, 100%);
+  width: min(1400px, 100%);
   margin: auto;
   transition: grid-template-columns 0.6s var(--ease), gap 0.6s var(--ease), width 0.6s var(--ease);
 }
@@ -413,7 +413,7 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
 .teaser.is-expanded {
   grid-template-columns: 1fr;
   gap: 0;
-  width: min(1060px, 100%);
+  width: min(1200px, 100%);
 }
 .teaser.is-expanded .teaser__info { display: none; }
 .teaser.is-expanded .teaser__hint { display: none; }
@@ -570,7 +570,7 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
 .reveal.is-shown { opacity: 1; transform: none; pointer-events: auto; }
 
 /* ---------------- Decision cards ---------------- */
-.decision__panel { width: 100%; max-width: 960px; margin: auto; }
+.decision__panel { width: 100%; max-width: 1200px; margin: auto; }
 .decision__heading {
   font-size: clamp(17px, 2.2vw, 25px);
   text-align: center;

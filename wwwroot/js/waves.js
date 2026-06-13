@@ -1,10 +1,11 @@
 /* ============================================================
-   Radiant Wave — animated background  [bg2: sound-wave]
-   A colorful audio-equalizer visualizer: mirrored rainbow bars
-   that pulse like a live sound wave, with a glowing waveform
-   line through the centre. Slow, continuous motion. Intensity
-   is adjustable so the atmosphere reacts to the journey.
-   (Previous "dot terrain" background saved as waves-bg1.js.)
+   Radiant Wave — animated background  [bg2: 3D sound-wave floor]
+   A colorful equalizer rendered in perspective: rows of bars
+   recede from the bottom toward a horizon, forming a 3D
+   "synthwave" floor that ripples like a sound wave. Slow,
+   continuous motion. Intensity is adjustable.
+   (Dot-grid terrain saved as waves-bg1.js;
+    flat sound-wave saved as waves-bg-flat.js.)
    ============================================================ */
 (function () {
   "use strict";
@@ -13,21 +14,20 @@
   if (!canvas) return;
   const ctx = canvas.getContext("2d", { alpha: true });
 
-  // Soft glow + low opacity so the centred sound-wave sits gently behind text.
-  canvas.style.filter = "blur(14px)";
-  canvas.style.opacity = "0.5";
-
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // soft glow + low opacity so the 3D floor sits gently behind text
+  canvas.style.filter = "blur(3px)";
+  canvas.style.opacity = "0.55";
 
   const state = {
     w: 0, h: 0,
     dpr: Math.min(window.devicePixelRatio || 1, 1.5),
     t: 0,
-    clock: 0,
     intensity: 1,
     targetIntensity: 1,
-    bars: [],
-    spacing: 16,
+    cols: 56,
+    rows: 16,
   };
 
   function resize() {
@@ -36,83 +36,55 @@
     canvas.width = Math.floor(state.w * state.dpr);
     canvas.height = Math.floor(state.h * state.dpr);
     ctx.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
-
-    state.spacing = state.w < 640 ? 12 : 16;
-    const count = Math.max(24, Math.floor(state.w / state.spacing));
-    const bars = [];
-    for (let i = 0; i < count; i++) {
-      bars.push({
-        // a few random factors so each bar dances a little differently
-        f1: 0.18 + Math.random() * 0.06,
-        f2: 0.05 + Math.random() * 0.05,
-        ph: Math.random() * Math.PI * 2,
-        sp: 0.8 + Math.random() * 0.6,
-      });
-    }
-    state.bars = bars;
+    state.cols = Math.max(32, Math.min(76, Math.round(state.w / 22)));
+    state.rows = state.w < 640 ? 12 : 16;
   }
 
-  function roundedBar(x, yTop, w, h, r) {
-    const radius = Math.min(r, w / 2, h / 2);
-    if (ctx.roundRect) {
-      ctx.beginPath();
-      ctx.roundRect(x, yTop, w, h, radius);
-      ctx.fill();
-    } else {
-      ctx.beginPath();
-      ctx.moveTo(x + radius, yTop);
-      ctx.arcTo(x + w, yTop, x + w, yTop + h, radius);
-      ctx.arcTo(x + w, yTop + h, x, yTop + h, radius);
-      ctx.arcTo(x, yTop + h, x, yTop, radius);
-      ctx.arcTo(x, yTop, x + w, yTop, radius);
-      ctx.fill();
-    }
+  // spectrum height at (nx across 0..1, d depth 0..1, time)
+  function ampAt(nx, d, t) {
+    const v =
+      Math.sin(nx * Math.PI * 5.0 + t * 0.9) * 0.5 +
+      Math.sin(nx * Math.PI * 9.0 - t * 0.6 + d * 4.0) * 0.3 +
+      Math.sin((nx * 6.0 + d * 7.0) * Math.PI + t * 0.7) * 0.3;
+    return Math.max(0.04, Math.min(1, (v + 1.1) / 2.2));
   }
 
   function frame() {
     state.intensity += (state.targetIntensity - state.intensity) * 0.04;
-
-    // Slow, steady, gentle motion.
-    const dtReal = reduceMotion ? 0.004 : 0.016;
-    state.t += dtReal * 0.42;
+    state.t += reduceMotion ? 0.004 : 0.018;
     const t = state.t;
-    const { w, h, bars, spacing } = state;
+    const { w, h, cols, rows } = state;
     const I = state.intensity;
 
     ctx.clearRect(0, 0, w, h);
-
-    // Centred equalizer: bars mirror around the middle, brightest at the centre
-    // line and fading to the tips. CSS blur + low opacity turn it into a soft
-    // glowing band that text reads over comfortably.
-    const centerY = h * 0.5;
-    const maxH = h * 0.34 * I;
-    const barW = spacing * 0.5;
-
     ctx.globalCompositeOperation = "lighter";
 
-    for (let i = 0; i < bars.length; i++) {
-      const b = bars[i];
-      const nx = i / (bars.length - 1);
+    const horizonY = h * 0.62;
+    const nearY = h * 1.06;
+    const maxBarH = h * 0.14 * I;
 
-      // layered oscillation → lively "spectrum" motion
-      let v =
-        Math.sin(i * b.f1 + t * 1.8 * b.sp + b.ph) +
-        Math.sin(i * b.f2 - t * 1.1) * 0.6 +
-        Math.sin(i * 0.5 + t * 3.0) * 0.35;
-      let amp = (v + 1.95) / 3.9;           // ~0..1
-      amp = Math.max(0.05, Math.min(1, amp));
-      const barH = amp * maxH;
+    // far rows first → near rows paint on top
+    for (let r = 0; r < rows; r++) {
+      const d = r / (rows - 1);                       // 0 far … 1 near
+      const floorY = horizonY + (nearY - horizonY) * Math.pow(d, 1.85);
+      const halfW = w * (0.06 + 0.88 * d);            // converges toward horizon
+      const colStep = (2 * halfW) / cols;
+      const bw = Math.max(1, colStep * 0.5);
+      const scale = 0.25 + 0.75 * d;
+      const depthFade = 0.18 + 0.82 * d;              // far rows dimmer
 
-      const x = i * spacing + (spacing - barW) / 2;
-      const hue = (nx * 320 + t * 14) % 360; // shifting rainbow across x
+      for (let c = 0; c < cols; c++) {
+        const nx = c / (cols - 1);
+        const amp = ampAt(nx, d, t);
+        const barH = amp * maxBarH * (0.45 + 1.05 * scale);
+        const x = w / 2 - halfW + (c + 0.5) * colStep;
+        const yTop = floorY - barH;
 
-      // vertical gradient: bright at the centre line, transparent at both tips
-      const g = ctx.createLinearGradient(0, centerY - barH, 0, centerY + barH);
-      g.addColorStop(0, `hsla(${hue}, 90%, 62%, 0)`);
-      g.addColorStop(0.5, `hsla(${hue}, 92%, 64%, 0.85)`);
-      g.addColorStop(1, `hsla(${hue}, 90%, 62%, 0)`);
-      ctx.fillStyle = g;
-      roundedBar(x, centerY - barH, barW, barH * 2, barW / 2);
+        const hue = (nx * 300 + t * 12) % 360;
+        const a = 0.5 * depthFade;
+        ctx.fillStyle = `hsla(${hue}, 90%, 62%, ${a})`;
+        ctx.fillRect(x - bw / 2, yTop, bw, barH);
+      }
     }
 
     ctx.globalCompositeOperation = "source-over";
