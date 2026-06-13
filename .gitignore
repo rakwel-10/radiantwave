@@ -5,6 +5,10 @@ obj/
 # Static deploy build artifact (assembled by the host build command)
 dist/
 
+# Large/real videos are hosted on GitHub Releases, not committed
+videos/upload/
+videos/video1#.mp4
+
 # Runtime data (config, analytics, server logs) — regenerated on first run
 Data/
 

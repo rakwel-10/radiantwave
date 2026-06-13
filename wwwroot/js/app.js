@@ -186,7 +186,13 @@
     setTimeout(() => { window.location.href = url; }, 220);
   }
 
-  function videoUrl(n) { return `/videos/video${n}.mp4`; }
+  function videoUrl(n) {
+    // If a remote base is configured (e.g. GitHub Releases / CDN), stream from
+    // there; otherwise serve the local /videos folder.
+    const base = App.config && App.config.videosBaseUrl;
+    if (base) return base.replace(/\/+$/, "") + "/video" + n + ".mp4";
+    return `/videos/video${n}.mp4`;
+  }
 
   // ---- wire interactions ------------------------------------
   function wire() {
