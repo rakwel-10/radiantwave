@@ -16,16 +16,19 @@
   const TWO_PI = Math.PI * 2;
 
   // blur enough to feel dreamy, but keep the spiral arms readable
-  canvas.style.filter = "blur(11px) saturate(130%)";
-  canvas.style.opacity = "0.8";
+  canvas.style.filter = "blur(13px) saturate(135%)";
+  canvas.style.opacity = "0.78";
 
   const state = {
     w: 0, h: 0,
     dpr: Math.min(window.devicePixelRatio || 1, 1.5),
     rot: 0,
+    flow: 0,
     intensity: 1,
     targetIntensity: 1,
   };
+
+  function ss(e0, e1, x) { const t = Math.min(1, Math.max(0, (x - e0) / (e1 - e0))); return t * t * (3 - 2 * t); }
 
   function resize() {
     state.w = window.innerWidth;
@@ -35,12 +38,13 @@
     ctx.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
   }
 
-  // pastel palette hues (blue · purple · pink · teal) to match the glass mesh
-  const ARM_HUES = [212, 268, 320, 168];
+  // rich multi-colour arm hues (blue · indigo · purple · pink · coral · teal)
+  const ARM_HUES = [208, 250, 292, 328, 12, 162];
 
   function frame() {
     state.intensity += (state.targetIntensity - state.intensity) * 0.04;
-    state.rot += (reduceMotion ? 0.0005 : 0.0014) * state.intensity; // slow swirl
+    state.rot += (reduceMotion ? 0.0003 : 0.0008) * state.intensity;       // gentle swirl
+    state.flow += (reduceMotion ? 0.0006 : 0.0019) * state.intensity;      // outward stream
     const { w, h } = state;
     const I = state.intensity;
 
@@ -49,32 +53,33 @@
 
     const cx = w * 0.5;
     const cy = h * 0.48;
-    const maxR = Math.hypot(w, h) * 0.55;
-    const ARMS = 3;
-    const POINTS = 180;
-    const turns = 2.6;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
+    const maxR = Math.hypot(w, h) * 0.58;
+    const ARMS = 6;
+    const COUNT = 100;
+    const turns = 2.3;
 
+    // Particles continuously travel center → edge along each arm (outward flow),
+    // fading in near the core and out at the rim to hide the wrap.
     for (let arm = 0; arm < ARMS; arm++) {
       const armOff = (arm / ARMS) * TWO_PI;
-      const hue = ARM_HUES[arm % ARM_HUES.length];
-      ctx.beginPath();
-      for (let i = 0; i < POINTS; i++) {
-        const f = i / (POINTS - 1);            // 0 center … 1 outer
+      const baseHue = ARM_HUES[arm % ARM_HUES.length];
+      for (let i = 0; i < COUNT; i++) {
+        const f = ((i / COUNT) + state.flow) % 1;          // 0 center … 1 outer
         const theta = f * turns * TWO_PI + armOff + state.rot;
-        const r = Math.pow(f, 0.9) * maxR;
+        const r = Math.pow(f, 0.85) * maxR;
         const x = cx + Math.cos(theta) * r;
         const y = cy + Math.sin(theta) * r;
-        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+
+        const fade = ss(0, 0.14, f) * (1 - ss(0.78, 1, f));
+        if (fade <= 0.01) continue;
+        const size = 5 + f * 22;                            // thicker toward the rim
+        const hue = (baseHue + f * 46) % 360;               // colour shifts along the arm
+        const a = 0.26 * fade * I;
+        ctx.fillStyle = `hsla(${hue}, 85%, 66%, ${a})`;
+        ctx.beginPath();
+        ctx.arc(x, y, size, 0, TWO_PI);
+        ctx.fill();
       }
-      ctx.strokeStyle = `hsla(${hue}, 82%, 66%, ${0.5 * I})`;
-      ctx.lineWidth = 12;
-      ctx.stroke();
-      // brighter inner core line
-      ctx.strokeStyle = `hsla(${hue}, 90%, 78%, ${0.35 * I})`;
-      ctx.lineWidth = 4;
-      ctx.stroke();
     }
 
     ctx.globalCompositeOperation = "source-over";
