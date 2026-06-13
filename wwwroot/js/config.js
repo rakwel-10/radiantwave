@@ -5,7 +5,7 @@
    and this is ignored. Edit values here, then redeploy.
    ============================================================ */
 window.RW_STATIC_CONFIG = {
-  "timings": { "video1Trigger": 5, "video2Trigger": 7, "video3Trigger": 5 },
+  "timings": { "video1Trigger": 10, "video2Trigger": 7, "video3Trigger": 5 },
   "text": {
     "welcomeHeading": "Welcome to Radiant Wave Technologies",
     "welcomeBody": "This is a private, invitation-only page. You have been granted temporary access. To proceed, we require some information from you. Your information will remain private and will not be shared.",
