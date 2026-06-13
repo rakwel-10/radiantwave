@@ -1,9 +1,10 @@
 /* ============================================================
-   Radiant Wave — animated dot-grid wave terrain
-   A perspective grid of glowing dots that rolls like hills,
-   coloured blue → purple → pink over black. Slow continuous
-   motion. Intensity is adjustable so the atmosphere reacts to
-   the journey (calm → energized).
+   Radiant Wave — animated background  [bg2: sound-wave]
+   A colorful audio-equalizer visualizer: mirrored rainbow bars
+   that pulse like a live sound wave, with a glowing waveform
+   line through the centre. Slow, continuous motion. Intensity
+   is adjustable so the atmosphere reacts to the journey.
+   (Previous "dot terrain" background saved as waves-bg1.js.)
    ============================================================ */
 (function () {
   "use strict";
@@ -12,28 +13,22 @@
   if (!canvas) return;
   const ctx = canvas.getContext("2d", { alpha: true });
 
+  // Soft glow + low opacity so the centred sound-wave sits gently behind text.
+  canvas.style.filter = "blur(14px)";
+  canvas.style.opacity = "0.5";
+
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const TWO_PI = Math.PI * 2;
 
   const state = {
     w: 0, h: 0,
-    dpr: Math.min(window.devicePixelRatio || 1, 1.25),
+    dpr: Math.min(window.devicePixelRatio || 1, 1.5),
     t: 0,
+    clock: 0,
     intensity: 1,
     targetIntensity: 1,
-    cols: 0,
-    rows: 46,
+    bars: [],
+    spacing: 16,
   };
-
-  // Gradient colours (blue → purple → pink).
-  const BLUE = [72, 112, 236];
-  const PURPLE = [150, 72, 214];
-  const PINK = [240, 84, 156];
-
-  function mix(a, b, f) {
-    return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f, a[2] + (b[2] - a[2]) * f];
-  }
-  function clamp01(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
 
   function resize() {
     state.w = window.innerWidth;
@@ -41,70 +36,83 @@
     canvas.width = Math.floor(state.w * state.dpr);
     canvas.height = Math.floor(state.h * state.dpr);
     ctx.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
-    state.cols = Math.max(48, Math.min(120, Math.round(state.w / 13)));
-    state.rows = state.w < 640 ? 38 : 48;
+
+    state.spacing = state.w < 640 ? 12 : 16;
+    const count = Math.max(24, Math.floor(state.w / state.spacing));
+    const bars = [];
+    for (let i = 0; i < count; i++) {
+      bars.push({
+        // a few random factors so each bar dances a little differently
+        f1: 0.18 + Math.random() * 0.06,
+        f2: 0.05 + Math.random() * 0.05,
+        ph: Math.random() * Math.PI * 2,
+        sp: 0.8 + Math.random() * 0.6,
+      });
+    }
+    state.bars = bars;
   }
 
-  // Rolling wave-surface height at grid coords (nx, nz) in 0..1.
-  function heightAt(nx, nz, t) {
-    return (
-      Math.sin(nx * Math.PI * 3.0 + t * 0.55) * 0.55 +
-      Math.sin(nz * Math.PI * 2.4 - t * 0.38) * 0.5 +
-      Math.sin((nx * 2.2 + nz * 3.6) * Math.PI + t * 0.45) * 0.4 +
-      Math.sin((nx * 5.0 - nz * 1.6) * Math.PI - t * 0.28) * 0.18
-    );
+  function roundedBar(x, yTop, w, h, r) {
+    const radius = Math.min(r, w / 2, h / 2);
+    if (ctx.roundRect) {
+      ctx.beginPath();
+      ctx.roundRect(x, yTop, w, h, radius);
+      ctx.fill();
+    } else {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, yTop);
+      ctx.arcTo(x + w, yTop, x + w, yTop + h, radius);
+      ctx.arcTo(x + w, yTop + h, x, yTop + h, radius);
+      ctx.arcTo(x, yTop + h, x, yTop, radius);
+      ctx.arcTo(x, yTop, x + w, yTop, radius);
+      ctx.fill();
+    }
   }
-  const HSPAN = 1.63; // approximate |height| range for normalisation
 
   function frame() {
     state.intensity += (state.targetIntensity - state.intensity) * 0.04;
-    state.t += reduceMotion ? 0.0025 : 0.01;
+
+    // Slow, steady, gentle motion.
+    const dtReal = reduceMotion ? 0.004 : 0.016;
+    state.t += dtReal * 0.42;
     const t = state.t;
-    const { w, h, cols, rows } = state;
+    const { w, h, bars, spacing } = state;
     const I = state.intensity;
 
     ctx.clearRect(0, 0, w, h);
+
+    // Centred equalizer: bars mirror around the middle, brightest at the centre
+    // line and fading to the tips. CSS blur + low opacity turn it into a soft
+    // glowing band that text reads over comfortably.
+    const centerY = h * 0.5;
+    const maxH = h * 0.34 * I;
+    const barW = spacing * 0.5;
+
     ctx.globalCompositeOperation = "lighter";
 
-    const horizonY = h * 0.30;
-    const nearY = h * 0.99;
-    const amp = h * 0.14 * I;
+    for (let i = 0; i < bars.length; i++) {
+      const b = bars[i];
+      const nx = i / (bars.length - 1);
 
-    // Draw far rows first so nearer dots layer on top.
-    for (let r = 0; r < rows; r++) {
-      const nz = r / (rows - 1);
-      const d = nz;                              // 0 far (top) → 1 near (bottom)
-      const persp = Math.pow(d, 1.45);
-      const baseY = horizonY + (nearY - horizonY) * persp;
-      const scale = 0.28 + 0.72 * d;
-      const halfSpan = w * (0.30 + 0.64 * d);
-      const radius = 0.5 + 2.3 * d;
+      // layered oscillation → lively "spectrum" motion
+      let v =
+        Math.sin(i * b.f1 + t * 1.8 * b.sp + b.ph) +
+        Math.sin(i * b.f2 - t * 1.1) * 0.6 +
+        Math.sin(i * 0.5 + t * 3.0) * 0.35;
+      let amp = (v + 1.95) / 3.9;           // ~0..1
+      amp = Math.max(0.05, Math.min(1, amp));
+      const barH = amp * maxH;
 
-      for (let c = 0; c < cols; c++) {
-        const nx = c / (cols - 1);
-        const gx = nx - 0.5;
-        const wave = heightAt(nx, nz, t);
-        const hNorm = clamp01((wave + HSPAN) / (2 * HSPAN));
+      const x = i * spacing + (spacing - barW) / 2;
+      const hue = (nx * 320 + t * 14) % 360; // shifting rainbow across x
 
-        const x = w * 0.5 + gx * 2 * halfSpan;
-        const y = baseY - wave * amp * scale;
-
-        // horizontal edge fade
-        let fade = 1 - clamp01((Math.abs(gx) * 2 - 0.74) / 0.26);
-        if (fade <= 0) continue;
-
-        const a = (0.06 + 0.34 * d) * (0.45 + 0.55 * hNorm) * fade * I;
-        if (a <= 0.01) continue;
-
-        // colour: blend across position + height
-        const cp = clamp01(0.5 * nx + 0.5 * hNorm);
-        const col = cp < 0.5 ? mix(BLUE, PURPLE, cp / 0.5) : mix(PURPLE, PINK, (cp - 0.5) / 0.5);
-
-        ctx.fillStyle = `rgba(${col[0] | 0},${col[1] | 0},${col[2] | 0},${a})`;
-        ctx.beginPath();
-        ctx.arc(x, y, radius, 0, TWO_PI);
-        ctx.fill();
-      }
+      // vertical gradient: bright at the centre line, transparent at both tips
+      const g = ctx.createLinearGradient(0, centerY - barH, 0, centerY + barH);
+      g.addColorStop(0, `hsla(${hue}, 90%, 62%, 0)`);
+      g.addColorStop(0.5, `hsla(${hue}, 92%, 64%, 0.85)`);
+      g.addColorStop(1, `hsla(${hue}, 90%, 62%, 0)`);
+      ctx.fillStyle = g;
+      roundedBar(x, centerY - barH, barW, barH * 2, barW / 2);
     }
 
     ctx.globalCompositeOperation = "source-over";
