@@ -1,6 +1,32 @@
-/* Radiant Wave marketing site — nav toggle + active link + simple form note */
+/* Radiant Wave marketing site — theme toggle + nav + forms */
 (function () {
   "use strict";
+
+  // ---- Light / dark theme ----
+  var root = document.documentElement;
+  var SUN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>';
+  var MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.6 6.6 0 0 0 9.8 9.8z"/></svg>';
+  if (!root.getAttribute("data-theme")) {
+    var t0 = "dark";
+    try { t0 = localStorage.getItem("rw-theme") || (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"); } catch (e) {}
+    root.setAttribute("data-theme", t0);
+  }
+  var navcta = document.querySelector(".nav-cta");
+  if (navcta) {
+    var tbtn = document.createElement("button");
+    tbtn.className = "theme-toggle";
+    tbtn.type = "button";
+    tbtn.setAttribute("aria-label", "Toggle light / dark theme");
+    var setIcon = function () { tbtn.innerHTML = root.getAttribute("data-theme") === "light" ? MOON : SUN; };
+    setIcon();
+    navcta.insertBefore(tbtn, navcta.firstChild);
+    tbtn.addEventListener("click", function () {
+      var next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("rw-theme", next); } catch (e) {}
+      setIcon();
+    });
+  }
 
   // Mobile nav toggle
   var toggle = document.querySelector(".nav-toggle");
