@@ -806,14 +806,17 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
 .loader__icon {
   position: relative;
   z-index: 2;
-  width: 46px;
-  height: 46px;
-  fill: #e6f7ff;
+  width: 62px;
+  height: 62px;
+  object-fit: contain;
   filter:
-    drop-shadow(0 0 6px #7fd6ff)
-    drop-shadow(0 0 16px #4aa6ff)
-    drop-shadow(0 0 30px rgba(120, 90, 255, 0.7));
-  animation: boltFlicker 1.5s infinite;
+    drop-shadow(0 0 12px rgba(122, 162, 255, 0.55))
+    drop-shadow(0 0 28px rgba(122, 162, 255, 0.3));
+  animation: logoPulse 2.4s var(--ease) infinite;
+}
+@keyframes logoPulse {
+  0%, 100% { transform: scale(0.94); opacity: 0.88; }
+  50% { transform: scale(1.06); opacity: 1; }
 }
 .loader__ring {
   position: absolute;
