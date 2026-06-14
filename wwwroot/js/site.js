@@ -60,4 +60,35 @@
   document.querySelectorAll(".reveal-up").forEach(function (el, i) {
     el.style.animationDelay = (i % 6) * 0.08 + "s";
   });
+
+  // Count-up numbers when scrolled into view
+  var counters = document.querySelectorAll("[data-count]");
+  if (counters.length) {
+    var fmt = function (n) {
+      var neg = n < 0; n = Math.abs(Math.round(n));
+      return (neg ? "−" : "") + n.toLocaleString("en-US");
+    };
+    var run = function (el) {
+      var to = parseFloat(el.getAttribute("data-count")) || 0;
+      var dur = 1500, t0 = null;
+      var tick = function (ts) {
+        if (t0 === null) t0 = ts;
+        var p = Math.min(1, (ts - t0) / dur);
+        var e = 1 - Math.pow(1 - p, 3); // ease-out
+        el.textContent = fmt(to * e);
+        if (p < 1) requestAnimationFrame(tick); else el.textContent = fmt(to);
+      };
+      requestAnimationFrame(tick);
+    };
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { io.unobserve(en.target); run(en.target); }
+        });
+      }, { threshold: 0.45 });
+      counters.forEach(function (c) { c.textContent = "0"; io.observe(c); });
+    } else {
+      counters.forEach(run);
+    }
+  }
 })();
