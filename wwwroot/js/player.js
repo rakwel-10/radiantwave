@@ -41,6 +41,10 @@
       root.className = "rw-player is-paused";
       root.innerHTML = `
         <video class="rw-player__video" playsinline preload="metadata"></video>
+        <div class="rw-player__loading" aria-hidden="true">
+          <span class="rw-spinner"></span>
+          <span class="rw-player__loading-txt">Loading video…</span>
+        </div>
         <button class="rw-player__bigplay" type="button" aria-label="Play video">
           <span>${ICON.bigplay}</span>
         </button>
@@ -91,6 +95,14 @@
         this.root.classList.add("is-paused");
         this.playBtn.innerHTML = ICON.play;
       });
+
+      // Buffering / loading indicator
+      this.video.addEventListener("waiting", () => this._setLoading(true));
+      this.video.addEventListener("stalled", () => this._setLoading(true));
+      this.video.addEventListener("playing", () => this._setLoading(false));
+      this.video.addEventListener("canplay", () => this._setLoading(false));
+      this.video.addEventListener("seeked", () => { if (!this.video.paused) this._setLoading(false); });
+      this.video.addEventListener("error", () => this._setLoading(false));
 
       this.video.addEventListener("loadedmetadata", () => {
         this.durEl.textContent = fmt(this.video.duration);
@@ -177,6 +189,12 @@
 
     onEnded(cb) { this._onEnded = cb; this._endedFired = false; return this; }
 
+    _setLoading(on) {
+      // Don't show the big "Loading" over the muted preview — it loops silently.
+      if (on && this.previewing) return;
+      this.root.classList.toggle("is-loading", !!on);
+    }
+
     /** Start a silent, looping teaser preview of the first `seconds`. */
     preview(seconds) {
       this.previewing = true;
@@ -198,6 +216,7 @@
       this.video.muted = false;
       this.triggerFired = false;
       try { this.video.currentTime = 0; } catch (_) {}
+      this._setLoading(true); // buffering until 'playing' fires
       const p = this.video.play();
       if (p && p.catch) p.catch(() => {});
       if (this._onRealPlay) this._onRealPlay();
@@ -206,7 +225,7 @@
     /** Called when the user clicks to really watch (from preview). */
     onRealPlay(cb) { this._onRealPlay = cb; return this; }
 
-    play() { const p = this.video.play(); if (p && p.catch) p.catch(() => {}); }
+    play() { if (!this.video.muted) this._setLoading(true); const p = this.video.play(); if (p && p.catch) p.catch(() => {}); }
     pause() { this.video.pause(); }
     reset() { this.video.pause(); this.video.currentTime = 0; this.triggerFired = false; this._endedFired = false; }
     destroy() { try { this.video.pause(); this.video.removeAttribute("src"); this.video.load(); } catch (_) {} }

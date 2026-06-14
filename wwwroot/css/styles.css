@@ -482,6 +482,38 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
 }
 .rw-player__video { width: 100%; height: 100%; display: block; object-fit: contain; background: #05070c; }
 
+/* Buffering / loading indicator */
+.rw-player__loading {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: none;
+  place-items: center;
+  align-content: center;
+  gap: 16px;
+  background: radial-gradient(closest-side, rgba(5, 7, 14, 0.55), rgba(5, 7, 14, 0.7));
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  pointer-events: none;
+}
+.rw-player.is-loading .rw-player__loading { display: grid; }
+.rw-player.is-loading .rw-player__bigplay { opacity: 0; }
+.rw-spinner {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.16);
+  border-top-color: #7fb0ff;
+  animation: spin 0.85s linear infinite;
+  box-shadow: 0 0 24px rgba(122, 162, 255, 0.4);
+}
+.rw-player__loading-txt {
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.82);
+}
+
 .rw-player__controls {
   position: absolute;
   left: 0; right: 0; bottom: 0;
