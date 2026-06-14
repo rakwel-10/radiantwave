@@ -42,6 +42,9 @@ html, body {
 
 body {
   position: relative;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
   background:
     radial-gradient(135% 120% at 50% 35%, #131a32 0%, #0c1124 45%, #070a16 100%);
 }
@@ -125,7 +128,8 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
 .stage {
   position: relative;
   z-index: 3;
-  height: 100dvh;
+  flex: 1 1 auto;
+  min-height: 0;
   width: 100%;
   display: grid;
   place-items: center;
@@ -808,19 +812,15 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
 
 /* ---------------- App footer (experience only) ---------------- */
 .app-foot {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 4; /* above the screens, below the full-screen overlays + loader */
+  position: relative;
+  z-index: 4;
+  flex: none;
   text-align: left;
-  padding: 14px clamp(16px, 4vw, 48px) calc(13px + env(safe-area-inset-bottom, 0px));
+  padding: 12px clamp(16px, 4vw, 48px) calc(12px + env(safe-area-inset-bottom, 0px));
   font-size: 10.5px;
   font-weight: 500;
   letter-spacing: 0.05em;
   color: rgba(255, 255, 255, 0.32);
-  pointer-events: none;
-  background: linear-gradient(180deg, transparent, rgba(6, 8, 16, 0.45));
 }
 .app-foot::before {
   content: "";
