@@ -22,6 +22,6 @@ window.RW_STATIC_CONFIG = {
     "video3Cta": "Continue to Radiant Wave Technologies"
   },
   "ghlEmbed": "<iframe src=\"https://link.sillabledigital.com/widget/form/WlpuqvONea8p5y1UEfMZ\" style=\"width:100%;height:100%;border:none;border-radius:3px\" id=\"inline-WlpuqvONea8p5y1UEfMZ\" data-layout=\"{'id':'INLINE'}\" data-trigger-type=\"alwaysShow\" data-trigger-value=\"\" data-activation-type=\"alwaysActivated\" data-activation-value=\"\" data-deactivation-type=\"neverDeactivate\" data-deactivation-value=\"\" data-form-name=\"Radiant Wave Form for 3 Videos\" data-height=\"718\" data-layout-iframe-id=\"inline-WlpuqvONea8p5y1UEfMZ\" data-form-id=\"WlpuqvONea8p5y1UEfMZ\" title=\"Radiant Wave Form for 3 Videos\"></iframe><script src=\"https://link.sillabledigital.com/js/form_embed.js\"></scr" + "ipt>",
-  "redirectUrl": "https://rhema-wave-website.vercel.app/",
+  "redirectUrl": "https://radiantwave-3d.vercel.app/",
   "videosBaseUrl": "https://github.com/rakwel-10/radiantwave/releases/download/videos"
 };

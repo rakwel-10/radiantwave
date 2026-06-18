@@ -236,7 +236,7 @@
   function finalRedirect() {
     track("video3_complete");
     track("final_cta_click");
-    const url = (App.config && App.config.redirectUrl) || "https://rhema-wave-website.vercel.app/";
+    const url = (App.config && App.config.redirectUrl) || "https://radiantwave-3d.vercel.app/";
     // allow the event to flush
     setTimeout(() => { window.location.href = url; }, 220);
   }
@@ -394,7 +394,7 @@
       cfg = await res.json();
     } catch (_) {
       // No backend (static deploy) → use the baked-in config.
-      cfg = window.RW_STATIC_CONFIG || { timings: { video1Trigger: 5, video2Trigger: 7, video3Trigger: 5 }, text: {}, ghlEmbed: "", redirectUrl: "https://rhema-wave-website.vercel.app/" };
+      cfg = window.RW_STATIC_CONFIG || { timings: { video1Trigger: 5, video2Trigger: 7, video3Trigger: 5 }, text: {}, ghlEmbed: "", redirectUrl: "https://radiantwave-3d.vercel.app/" };
     }
     App.config = cfg;
 

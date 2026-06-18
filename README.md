@@ -141,7 +141,7 @@ the experience advances **without a reload**:
 Until you paste an embed, a placeholder + the Begin button let you test the full flow.
 
 ### Final redirect
-**Settings → Final redirect URL** (default `https://rhema-wave-website.vercel.app/`).
+**Settings → Final redirect URL** (default `https://radiantwave-3d.vercel.app/`).
 
 ### Copy
 Every user-facing string is editable in **Text Controls**.

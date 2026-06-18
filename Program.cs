@@ -501,7 +501,7 @@ class AppConfig
         </iframe>
         <script src="https://link.sillabledigital.com/js/form_embed.js"></script>
         """;
-    public string RedirectUrl { get; set; } = "https://rhema-wave-website.vercel.app/";
+    public string RedirectUrl { get; set; } = "https://radiantwave-3d.vercel.app/";
     public string AdminPasswordHash { get; set; } = "";
 
     public static AppConfig CreateDefault() => new();
