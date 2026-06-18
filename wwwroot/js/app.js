@@ -9,7 +9,7 @@
   const App = {
     config: null,
     players: {},
-    selections: { q1: null, q2: null },
+    selections: { q1: null, q2: null, q3: null },
   };
 
   // ---- helpers ----------------------------------------------
@@ -221,9 +221,31 @@
     transitionTo("qualify");
   }
 
+  // Decision after video 2 (toxins/environment): A/B disqualify, C qualifies.
+  function handleDecision2(letter) {
+    track("option" + letter); // optionA / optionB / optionC
+
+    const cards = $$("[data-decision2]");
+    cards.forEach((c) => {
+      c.classList.add("is-locked");
+      if (c.getAttribute("data-decision2") === letter) c.classList.add(letter === "C" ? "is-positive" : "is-selected");
+      else c.classList.add("is-dim");
+    });
+
+    setTimeout(() => {
+      if (letter === "C") {
+        enterQualify();
+      } else {
+        const t = App.config.text || {};
+        enterDisqualified(letter === "B" ? t.disqualB : t.disqualA);
+      }
+    }, 700);
+  }
+
   function enterVideo3() {
     track("valuation_q1", App.selections.q1);
     track("valuation_q2", App.selections.q2);
+    track("valuation_q3", App.selections.q3);
     track("qualification_complete");
 
     document.body.classList.add("atmo-energized");
@@ -265,11 +287,14 @@
     wireKnowledgeCheck();
     $("#kc-continue").addEventListener("click", enterVideo2);
 
-    // Video 2 trigger -> reveal the continue button -> valuation questions.
-    App.players.v2.onTrigger(App.config.timings.video2Trigger, () => { App.players.v2.pause(); showReveal("video2-next"); });
-    $("#video2-next").addEventListener("click", enterQualify);
+    // Video 2 trigger -> reveal the A/B/C decision.
+    App.players.v2.onTrigger(App.config.timings.video2Trigger, () => { App.players.v2.pause(); showReveal("video2-decision"); });
+    $$('[data-decision2]').forEach((card) => {
+      card.addEventListener("click", () => handleDecision2(card.getAttribute("data-decision2")));
+    });
 
-    // Valuation questions — auto-advance once both are answered.
+    // Valuation questions — reveal one at a time; a Proceed button appears once
+    // all three are answered.
     $$(".value-cards").forEach((group) => {
       const q = group.getAttribute("data-value-group");
       group.querySelectorAll(".card").forEach((card) => {
@@ -277,11 +302,13 @@
           group.querySelectorAll(".card").forEach((c) => c.classList.remove("is-positive"));
           card.classList.add("is-positive");
           App.selections[q] = card.getAttribute("data-value");
-          if (q === "q1") revealQuestion2();
-          maybeAdvanceQualify();
+          if (q === "q1") revealQuestion(2);
+          else if (q === "q2") revealQuestion(3);
+          maybeShowProceed();
         });
       });
     });
+    $("#qualify-proceed").addEventListener("click", enterVideo3);
 
     // Video 3 trigger -> reveal final CTA
     App.players.v3.onTrigger(App.config.timings.video3Trigger, () => { App.players.v3.pause(); showReveal("final-cta"); });
@@ -294,23 +321,26 @@
     $$(".ripple, .btn--cta").forEach(attachRipple);
   }
 
-  // Reveal the second valuation question once the first has been answered —
-  // one question at a time, in the same box.
-  function revealQuestion2() {
-    const q2 = $('.question[data-question="2"]');
-    if (q2 && q2.classList.contains("is-collapsed")) {
-      q2.classList.remove("is-collapsed");
-      q2.classList.add("q-reveal");
-      q2.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  // Reveal the next valuation question once the previous is answered —
+  // one question at a time, in the same column.
+  function revealQuestion(num) {
+    const q = $(`.question[data-question="${num}"]`);
+    if (q && q.classList.contains("is-collapsed")) {
+      q.classList.remove("is-collapsed");
+      q.classList.add("q-reveal");
+      q.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
   }
 
-  // Once both valuation questions are answered, advance automatically (the
-  // loader handles the transition — no continue button needed).
-  function maybeAdvanceQualify() {
-    if (App.selections.q1 && App.selections.q2 && !App._qualifyAdvancing) {
-      App._qualifyAdvancing = true;
-      setTimeout(() => enterVideo3(), 800);
+  // Once all three valuation questions are answered, reveal the Proceed button.
+  function maybeShowProceed() {
+    if (App.selections.q1 && App.selections.q2 && App.selections.q3) {
+      const wrap = $("#qualify-proceed-wrap");
+      if (wrap && wrap.classList.contains("is-collapsed")) {
+        wrap.classList.remove("is-collapsed");
+        wrap.classList.add("q-reveal");
+        wrap.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
     }
   }
 

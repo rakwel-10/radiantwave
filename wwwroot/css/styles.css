@@ -642,6 +642,14 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
 
 /* ---------------- Decision cards ---------------- */
 .decision__panel { width: 100%; max-width: 1200px; margin: auto; }
+.decision__lead {
+  font-size: clamp(14px, 1.7vw, 17px);
+  line-height: 1.65;
+  text-align: center;
+  max-width: 80ch;
+  margin: 0 auto 14px;
+  color: var(--text-dim);
+}
 .decision__heading {
   font-size: clamp(17px, 2.2vw, 25px);
   text-align: center;
@@ -652,7 +660,7 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
 .cards { display: grid; gap: 16px; }
 .cards--3 { grid-template-columns: repeat(3, 1fr); }
 .cards--4 { grid-template-columns: repeat(4, 1fr); }
-.cards--5 { grid-template-columns: repeat(5, 1fr); }
+.cards--8 { grid-template-columns: repeat(4, 1fr); }
 
 .card {
   position: relative;
@@ -796,6 +804,7 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
   color: #eaf6fb;
 }
 #qualify-continue { margin-top: 26px; }
+.qualify__proceed { margin-top: 26px; }
 
 /* Step-by-step reveal */
 .is-collapsed { display: none !important; }
@@ -1007,7 +1016,7 @@ body.atmo-energized .vignette { background: radial-gradient(90% 70% at 50% 110%,
 @media (max-width: 860px) {
   .cards--3 { grid-template-columns: 1fr; }
   .cards--4 { grid-template-columns: repeat(2, 1fr); }
-  .cards--5 { grid-template-columns: repeat(2, 1fr); }
+  .cards--8 { grid-template-columns: repeat(2, 1fr); }
   .card { min-height: auto; }
 
   /* Welcome collapses to a single column, kept left-aligned. */

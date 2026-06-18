@@ -354,9 +354,10 @@ public partial class Program
         "registration",
         "video1_complete", "video2_complete", "video3_complete",
         "option1", "option2", "option3",
+        "optionA", "optionB", "optionC",
         "qualification_complete",
         "final_cta_click",
-        "valuation_q1", "valuation_q2"
+        "valuation_q1", "valuation_q2", "valuation_q3"
     };
 }
 
@@ -438,7 +439,8 @@ class Store
             {
                 var buckets = new Dictionary<string, int>
                 {
-                    ["$0"] = 0, ["$10,000"] = 0, ["$100,000"] = 0, ["$1,000,000"] = 0, ["Priceless"] = 0
+                    ["$1"] = 0, ["$10"] = 0, ["$100"] = 0, ["$1,000"] = 0,
+                    ["$10,000"] = 0, ["$100,000"] = 0, ["$1,000,000"] = 0, ["Priceless"] = 0
                 };
                 foreach (var e in _events.Where(e => e.Type == t && e.Meta is not null))
                     if (buckets.ContainsKey(e.Meta!)) buckets[e.Meta!]++;
@@ -454,10 +456,14 @@ class Store
                 option1 = Count("option1"),
                 option2 = Count("option2"),
                 option3 = Count("option3"),
+                optionA = Count("optionA"),
+                optionB = Count("optionB"),
+                optionC = Count("optionC"),
                 qualificationCompletions = Count("qualification_complete"),
                 finalCtaClicks = Count("final_cta_click"),
                 valuationQ1 = ValuationBuckets("valuation_q1"),
                 valuationQ2 = ValuationBuckets("valuation_q2"),
+                valuationQ3 = ValuationBuckets("valuation_q3"),
                 totalEvents = _events.Count
             };
         }
@@ -534,12 +540,29 @@ class TextContent
         "Thank you for visiting our site. We wish you and your family the very best. We will contact you in the future using the email address you provided once a large portion of the population has proven the validity of Radiant Wave Technologies. However, at this time, you are not qualified to proceed.";
     public string KcCongrats { get; set; } =
         "Congratulations! You have been granted access to the next presentation.";
+    public string Decision2Lead { get; set; } =
+        "Since our environment on Earth has become increasingly stressful and overloaded with pollutants, toxins, carcinogens, heavy metals, microplastics, radiation, and free radicals—all of which are nearly impossible to avoid unless we somehow colonize another planet—we are faced with a choice.";
+    public string Decision2Prompt { get; set; } =
+        "Please select the option below that best describes your decision:";
+    public string OptionA { get; set; } =
+        "I want to forget I ever watched this presentation, ignore everything I learned, and hope I never suffer the consequences.";
+    public string OptionB { get; set; } =
+        "I realize that unless I do something about the toxins I absorb, the degradation of my 37 trillion microscopic “cellular” batteries, and the ongoing assault of free radicals, my immune system may continue to weaken. Eventually, my body may no longer have the energy to fend off or eliminate germs, bacteria, viruses, and other ailments, nor effectively resist premature aging and age-related degenerative diseases. Even so, I choose to ignore it all and hope I never suffer the consequences.";
+    public string OptionC { get; set; } =
+        "I will find a way to spend time in Radiant Waves—whether by visiting a center, opening a center, or purchasing a system for my home or office. I want to use this exclusive technology to recharge my 37 trillion microscopic “cellular” batteries, increase my production of cellular electricity, strengthen my immune system, and improve both my and my family’s ability to fend off germs, bacteria, viruses, and other ailments, while aging gracefully and potentially reducing the impact of age-related degenerative diseases.";
+    public string DisqualA { get; set; } =
+        "We appreciate you taking the time to learn more about Radiant Wave Technologies and wish you and your family the very best. Unfortunately, your choice of Option A disqualifies you from proceeding further.";
+    public string DisqualB { get; set; } =
+        "We appreciate you taking the time to learn more about Radiant Wave Technologies. We are glad you acknowledge the unhealthy environment in which we live and hope that one day you will recognize the value of Radiant Wave Technology. We wish you and your family the very best. Unfortunately, your choice of Option B disqualifies you from proceeding further.";
     public string CongratsMessage { get; set; } =
-        "Before continuing to the final presentation, please answer the following two questions.";
+        "Choosing Option C shows that you are earnest, insightful, decisive, and that you value your health, wellbeing, vitality, and longevity—as well as that of your family. Your decision qualifies you to view the next presentation, which will reveal the true mission and purpose of Radiant Wave Technologies. Before proceeding, please answer the following:";
     public string ValuationQ1 { get; set; } =
-        "What value do you place on your own health, wellbeing, vitality, and longevity?";
+        "What value do you place on YOUR health, wellbeing, vitality, and longevity?";
     public string ValuationQ2 { get; set; } =
-        "What value do you place on the health, wellbeing, vitality, and longevity of your family and loved ones?";
+        "What value do you place on the health, wellbeing, vitality, and longevity of YOUR FAMILY and LOVED ONES?";
+    public string ValuationQ3 { get; set; } =
+        "If you were offered the opportunity to share this incredible technology with the world and be compensated for your efforts, what value would you place on that opportunity?";
+    public string QualifyProceed { get; set; } = "Proceed to the Next Presentation";
     public string QualifyContinue { get; set; } = "Continue to Final Video";
     public string Video3Cta { get; set; } = "Continue to Radiant Wave Technologies";
 }

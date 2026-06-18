@@ -168,6 +168,7 @@
       <div class="valgrid">
         <fieldset><legend>Q1 — Your own health valuation</legend><div id="val-q1"></div></fieldset>
         <fieldset><legend>Q2 — Family valuation</legend><div id="val-q2"></div></fieldset>
+        <fieldset><legend>Q3 — Opportunity valuation</legend><div id="val-q3"></div></fieldset>
       </div>
     </section>
 
@@ -197,12 +198,21 @@
       ["option1", "Feeling Option 1 (disqualify)", "textarea"],
       ["option2", "Feeling Option 2 (disqualify)", "textarea"],
       ["option3", "Feeling Option 3 (qualify)", "textarea"],
-      ["disqualMessage", "Disqualification message — Option 1", "textarea"],
-      ["disqualMessage2", "Disqualification message — Option 2", "textarea"],
-      ["kcCongrats", "Qualified message (Option 3, before video 2)", "textarea"],
-      ["congratsMessage", "Valuation intro (before video 3)", "textarea"],
+      ["disqualMessage", "Disqualification message — Feeling Option 1", "textarea"],
+      ["disqualMessage2", "Disqualification message — Feeling Option 2", "textarea"],
+      ["kcCongrats", "Qualified message (Feeling Option 3, before video 2)", "textarea"],
+      ["decision2Lead", "Decision lead text (after video 2)", "textarea"],
+      ["decision2Prompt", "Decision prompt (after video 2)", "input"],
+      ["optionA", "Decision Option A (disqualify)", "textarea"],
+      ["optionB", "Decision Option B (disqualify)", "textarea"],
+      ["optionC", "Decision Option C (qualify)", "textarea"],
+      ["disqualA", "Disqualification message — Option A", "textarea"],
+      ["disqualB", "Disqualification message — Option B", "textarea"],
+      ["congratsMessage", "Qualified / valuation intro (Option C, before video 3)", "textarea"],
       ["valuationQ1", "Valuation question 1", "textarea"],
       ["valuationQ2", "Valuation question 2", "textarea"],
+      ["valuationQ3", "Valuation question 3", "textarea"],
+      ["qualifyProceed", "Proceed button label", "input"],
       ["video3Cta", "Video 3 — final CTA label", "input"],
     ];
 
@@ -346,15 +356,19 @@
         ["Video 1 complete", a.video1Completions],
         ["Video 2 complete", a.video2Completions],
         ["Video 3 complete", a.video3Completions],
-        ["Option 1", a.option1],
-        ["Option 2", a.option2],
-        ["Option 3", a.option3],
+        ["Feeling Opt 1", a.option1],
+        ["Feeling Opt 2", a.option2],
+        ["Feeling Opt 3", a.option3],
+        ["Decision A", a.optionA],
+        ["Decision B", a.optionB],
+        ["Decision C", a.optionC],
         ["Qualified", a.qualificationCompletions],
         ["Final CTA clicks", a.finalCtaClicks],
       ];
       $("#stats").innerHTML = items.map(([l, n]) => `<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join("");
       renderVal("#val-q1", a.valuationQ1);
       renderVal("#val-q2", a.valuationQ2);
+      renderVal("#val-q3", a.valuationQ3);
     }
 
     function renderVal(sel, obj) {
