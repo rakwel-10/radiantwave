@@ -997,7 +997,7 @@ body.atmo-energized .vignette { background: radial-gradient(90% 70% at 50% 110%,
   25% { opacity: 1; }
   100% { transform: scale(0.4); opacity: 0; }
 }
-@keyframes arcSpin { to { transform: rotate(-360deg); } }
+@keyframes arcSpin { to { transform: rotate(360deg); } }
 @keyframes boltFlicker {
   0%, 18%, 22%, 48%, 52%, 100% { opacity: 1; }
   20% { opacity: 0.3; }
