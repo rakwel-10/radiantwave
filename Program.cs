@@ -438,7 +438,7 @@ class Store
             {
                 var buckets = new Dictionary<string, int>
                 {
-                    ["$10,000"] = 0, ["$100,000"] = 0, ["$1,000,000"] = 0, ["Priceless"] = 0
+                    ["$0"] = 0, ["$10,000"] = 0, ["$100,000"] = 0, ["$1,000,000"] = 0, ["Priceless"] = 0
                 };
                 foreach (var e in _events.Where(e => e.Type == t && e.Meta is not null))
                     if (buckets.ContainsKey(e.Meta!)) buckets[e.Meta!]++;

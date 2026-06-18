@@ -652,6 +652,7 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
 .cards { display: grid; gap: 16px; }
 .cards--3 { grid-template-columns: repeat(3, 1fr); }
 .cards--4 { grid-template-columns: repeat(4, 1fr); }
+.cards--5 { grid-template-columns: repeat(5, 1fr); }
 
 .card {
   position: relative;
@@ -700,6 +701,13 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45), 0 0 34px rgba(255, 130, 85, 0.45);
 }
 .card.is-selected .card__index { color: var(--cta); }
+/* Positive (qualifying) selection — e.g. feeling Option 3 lights up green. */
+.card.is-positive {
+  border-color: #34d399;
+  background: linear-gradient(180deg, rgba(52, 211, 153, 0.18), rgba(52, 211, 153, 0.05));
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45), 0 0 34px rgba(52, 211, 153, 0.45);
+}
+.card.is-positive .card__index { color: #34d399; }
 .card.is-locked { pointer-events: none; }
 .card.is-dim { opacity: 0.4; filter: grayscale(0.4); }
 
@@ -999,6 +1007,7 @@ body.atmo-energized .vignette { background: radial-gradient(90% 70% at 50% 110%,
 @media (max-width: 860px) {
   .cards--3 { grid-template-columns: 1fr; }
   .cards--4 { grid-template-columns: repeat(2, 1fr); }
+  .cards--5 { grid-template-columns: repeat(2, 1fr); }
   .card { min-height: auto; }
 
   /* Welcome collapses to a single column, kept left-aligned. */

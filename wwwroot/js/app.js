@@ -188,7 +188,7 @@
     const cards = $$(".kc-feeling [data-kc-option]");
     cards.forEach((c) => {
       c.classList.add("is-locked");
-      if (c.getAttribute("data-kc-option") === String(num)) c.classList.add("is-selected");
+      if (c.getAttribute("data-kc-option") === String(num)) c.classList.add(num === 3 ? "is-positive" : "is-selected");
       else c.classList.add("is-dim");
     });
 
@@ -274,8 +274,8 @@
       const q = group.getAttribute("data-value-group");
       group.querySelectorAll(".card").forEach((card) => {
         card.addEventListener("click", () => {
-          group.querySelectorAll(".card").forEach((c) => c.classList.remove("is-selected"));
-          card.classList.add("is-selected");
+          group.querySelectorAll(".card").forEach((c) => c.classList.remove("is-positive"));
+          card.classList.add("is-positive");
           App.selections[q] = card.getAttribute("data-value");
           if (q === "q1") revealQuestion2();
           maybeAdvanceQualify();
