@@ -137,27 +137,79 @@
     });
   }
 
-  function handleOption(num) {
-    track("video2_complete");
+  // ---- knowledge check + qualification (after video 1) ------
+  function startKnowledgeCheck() {
+    showReveal("knowledge-check");
+  }
+
+  // Each multiple-choice question must be answered correctly to advance to the
+  // next; the final step is the "how do you feel" qualification decision.
+  function wireKnowledgeCheck() {
+    $$(".knowledge-check .kc-options").forEach((group) => {
+      group.querySelectorAll(".kc-opt").forEach((opt) => {
+        opt.addEventListener("click", () => {
+          if (group.classList.contains("is-answered")) return;
+          if (opt.getAttribute("data-correct") === "true") {
+            group.classList.add("is-answered");
+            opt.classList.add("is-correct");
+            group.querySelectorAll(".kc-opt").forEach((b) => { b.disabled = true; });
+            advanceKnowledgeCheck(group);
+          } else {
+            opt.classList.add("is-wrong");
+            opt.classList.remove("kc-shake"); void opt.offsetWidth; opt.classList.add("kc-shake");
+          }
+        });
+      });
+    });
+
+    $$(".kc-feeling [data-kc-option]").forEach((card) => {
+      card.addEventListener("click", () => handleKcOption(Number(card.getAttribute("data-kc-option"))));
+    });
+  }
+
+  // Reveal the next step (next question, or the final feeling decision).
+  function advanceKnowledgeCheck(group) {
+    const step = group.closest(".kc-q").getAttribute("data-kc-step");
+    const nextStep = step === "1" ? "2" : step === "2" ? "3" : "feeling";
+    const next = $(`.knowledge-check [data-kc-step="${nextStep}"]`);
+    if (next && next.classList.contains("is-collapsed")) {
+      setTimeout(() => {
+        next.classList.remove("is-collapsed");
+        next.classList.add("q-reveal");
+        next.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }, 450);
+    }
+  }
+
+  function handleKcOption(num) {
     track("option" + num);
 
     // lock + highlight selection
-    const cards = $$('[data-screen="video2"] .card');
+    const cards = $$(".kc-feeling [data-kc-option]");
     cards.forEach((c) => {
       c.classList.add("is-locked");
-      if (c.getAttribute("data-option") === String(num)) c.classList.add("is-selected");
+      if (c.getAttribute("data-kc-option") === String(num)) c.classList.add("is-selected");
       else c.classList.add("is-dim");
     });
 
-    App.players.v2.pause();
-
     setTimeout(() => {
-      if (num === 3) enterQualify();
-      else enterDisqualified();
+      if (num === 3) {
+        // Qualified → congratulations, then continue to The Why.
+        const kc = $('[data-reveal="knowledge-check"]');
+        if (kc) kc.classList.remove("is-shown");
+        showReveal("kc-pass");
+      } else {
+        const t = App.config.text || {};
+        enterDisqualified(num === 2 ? t.disqualMessage2 : t.disqualMessage);
+      }
     }, 700);
   }
 
-  function enterDisqualified() {
+  function enterDisqualified(message) {
+    if (message) {
+      const body = $('[data-screen="disqualified"] .endcard__body');
+      if (body) body.textContent = message;
+    }
     document.body.classList.add("atmo-calm");
     document.body.classList.remove("atmo-energized");
     if (window.RadiantWaves) window.RadiantWaves.setIntensity(0.35);
@@ -165,6 +217,7 @@
   }
 
   function enterQualify() {
+    track("video2_complete");
     transitionTo("qualify");
   }
 
@@ -207,15 +260,14 @@
       p.onRealPlay(() => { if (t) t.classList.add("is-expanded"); });
     });
 
-    // Video 1: at the trigger, reveal the "Next Video: The Why" button.
-    App.players.v1.onTrigger(App.config.timings.video1Trigger, () => { App.players.v1.pause(); showReveal("video1-next"); });
-    $("#video1-next").addEventListener("click", enterVideo2);
+    // Video 1: at the trigger, pause and present the knowledge check + qualification.
+    App.players.v1.onTrigger(App.config.timings.video1Trigger, () => { App.players.v1.pause(); startKnowledgeCheck(); });
+    wireKnowledgeCheck();
+    $("#kc-continue").addEventListener("click", enterVideo2);
 
-    // Video 2 trigger -> reveal decision
-    App.players.v2.onTrigger(App.config.timings.video2Trigger, () => { App.players.v2.pause(); showReveal("decision"); });
-    $$('[data-screen="video2"] .card').forEach((card) => {
-      card.addEventListener("click", () => handleOption(Number(card.getAttribute("data-option"))));
-    });
+    // Video 2 trigger -> reveal the continue button -> valuation questions.
+    App.players.v2.onTrigger(App.config.timings.video2Trigger, () => { App.players.v2.pause(); showReveal("video2-next"); });
+    $("#video2-next").addEventListener("click", enterQualify);
 
     // Valuation questions — auto-advance once both are answered.
     $$(".value-cards").forEach((group) => {

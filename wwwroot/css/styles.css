@@ -793,6 +793,59 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
 .is-collapsed { display: none !important; }
 .q-reveal { animation: qIn 0.5s var(--ease) both; }
 
+/* ---------------- Knowledge check (after video 1) ---------------- */
+.kc__panel { width: 100%; max-width: 860px; margin: auto; }
+.kc__title {
+  font-family: var(--display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-size: clamp(24px, 3.4vw, 38px);
+  text-align: center;
+  margin: 0;
+  color: #fff;
+}
+.kc__lead { text-align: center; color: var(--text-dim); margin: 8px 0 2px; line-height: 1.6; }
+
+.kc-options { display: flex; flex-direction: column; gap: 12px; }
+.kc-opt {
+  position: relative;
+  text-align: left;
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.5;
+  color: #e9f4fa;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  border: 1px solid var(--accent-line);
+  border-radius: 14px;
+  padding: 15px 18px;
+  cursor: pointer;
+  transition: transform 0.25s var(--ease), border-color 0.25s var(--ease), box-shadow 0.25s var(--ease), background 0.25s var(--ease);
+}
+.kc-opt:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), 0 0 24px rgba(41, 182, 230, 0.3);
+}
+.kc-opt:disabled { cursor: default; }
+.kc-opt.is-correct {
+  border-color: #34d399;
+  background: linear-gradient(180deg, rgba(52, 211, 153, 0.18), rgba(52, 211, 153, 0.05));
+  box-shadow: 0 0 28px rgba(52, 211, 153, 0.35);
+  color: #eafff6;
+}
+.kc-opt.is-wrong {
+  border-color: #f87171;
+  background: linear-gradient(180deg, rgba(248, 113, 113, 0.16), rgba(248, 113, 113, 0.04));
+  color: #ffe4e4;
+}
+.kc-shake { animation: kcShake 0.4s var(--ease) both; }
+@keyframes kcShake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-5px); }
+  40%, 60% { transform: translateX(5px); }
+}
+
 /* ---------------- Cinematic sweep transition ---------------- */
 .sweep {
   position: fixed;

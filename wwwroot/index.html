@@ -76,8 +76,85 @@
           <p class="teaser__hint">Press play to begin</p>
         </div>
       </div>
-      <div class="reveal video-overlay" data-reveal="video1-next">
-        <button id="video1-next" class="btn btn--cta btn--xl ripple" type="button">Next Video: The Why</button>
+      <!-- Knowledge check + qualification gate (replaces the old "Next Video" button). -->
+      <div class="reveal video-overlay video-overlay--wide knowledge-check" data-reveal="knowledge-check">
+        <div class="kc__panel">
+          <h2 class="kc__title">Knowledge Check &amp; Qualification</h2>
+          <p class="kc__lead">Please choose the correct answer to the following questions.</p>
+
+          <!-- Q1 -->
+          <div class="qcard kc-q" data-kc-step="1">
+            <span class="question__num">Question 1 of 3</span>
+            <h3 class="question__label">Who discovered the &ldquo;Bioelectric Field&rdquo;?</h3>
+            <div class="kc-options" data-kc-group="1">
+              <button class="kc-opt" type="button">Thomas Edison</button>
+              <button class="kc-opt" type="button">Deepak Chopra</button>
+              <button class="kc-opt" type="button" data-correct="true">Luigi Galvani</button>
+              <button class="kc-opt" type="button">Nikola Tesla</button>
+            </div>
+          </div>
+
+          <!-- Q2 -->
+          <div class="qcard kc-q is-collapsed" data-kc-step="2">
+            <span class="question__num">Question 2 of 3</span>
+            <h3 class="question__label">What did we <strong>NOT</strong> discover when we combined the discoveries of Luigi Galvani, Nikola Tesla, and Deepak Chopra?</h3>
+            <div class="kc-options" data-kc-group="2">
+              <button class="kc-opt" type="button">The health of our mitochondria determines our overall health</button>
+              <button class="kc-opt" type="button" data-correct="true">They are all Nobel Prize recipients</button>
+              <button class="kc-opt" type="button">Human cells run on electricity</button>
+              <button class="kc-opt" type="button">Human cells can be affected by outside sources</button>
+            </div>
+          </div>
+
+          <!-- Q3 -->
+          <div class="qcard kc-q is-collapsed" data-kc-step="3">
+            <span class="question__num">Question 3 of 3</span>
+            <h3 class="question__label">What did scientists discover is the cause of aging and age-related degenerative diseases?</h3>
+            <div class="kc-options" data-kc-group="3">
+              <button class="kc-opt" type="button">Lack of deep, restful sleep</button>
+              <button class="kc-opt" type="button" data-correct="true">Reduced ability of mitochondria to produce and store adequate electricity</button>
+              <button class="kc-opt" type="button">High levels of stress</button>
+              <button class="kc-opt" type="button">Pollutants in our environment</button>
+            </div>
+          </div>
+
+          <!-- Final step: how do you feel? (qualification decision, moved up from video 2) -->
+          <div class="qcard kc-feeling is-collapsed" data-kc-step="feeling">
+            <span class="question__num">Final Step</span>
+            <h3 class="question__label" data-text="decisionHeading">Please choose the option that best describes how you feel after viewing this presentation:</h3>
+            <div class="cards cards--3">
+              <button class="card" type="button" data-kc-option="1">
+                <span class="card__index">01</span>
+                <span class="card__text" data-text="option1"></span>
+                <span class="card__glow" aria-hidden="true"></span>
+              </button>
+              <button class="card" type="button" data-kc-option="2">
+                <span class="card__index">02</span>
+                <span class="card__text" data-text="option2"></span>
+                <span class="card__glow" aria-hidden="true"></span>
+              </button>
+              <button class="card" type="button" data-kc-option="3">
+                <span class="card__index">03</span>
+                <span class="card__text" data-text="option3"></span>
+                <span class="card__glow" aria-hidden="true"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Qualified (Option 3) → congratulations, then continue to The Why. -->
+      <div class="reveal video-overlay" data-reveal="kc-pass">
+        <div class="endcard glass">
+          <div class="endcard__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M8 12.5l2.5 2.5L16 9.5" />
+            </svg>
+          </div>
+          <p class="endcard__body" data-text="kcCongrats">Congratulations! You have been granted access to the next presentation.</p>
+          <button id="kc-continue" class="btn btn--cta btn--xl ripple" type="button">Next Video: The Why</button>
+        </div>
       </div>
     </section>
 
@@ -97,27 +174,8 @@
           </div>
         </div>
       </div>
-      <div class="reveal video-overlay video-overlay--wide decision" data-reveal="decision">
-        <div class="decision__panel">
-          <h2 class="decision__heading" data-text="decisionHeading">Please choose which of the following is most appealing to you:</h2>
-          <div class="cards cards--3">
-            <button class="card" type="button" data-option="1">
-              <span class="card__index">01</span>
-              <span class="card__text" data-text="option1"></span>
-              <span class="card__glow" aria-hidden="true"></span>
-            </button>
-            <button class="card" type="button" data-option="2">
-              <span class="card__index">02</span>
-              <span class="card__text" data-text="option2"></span>
-              <span class="card__glow" aria-hidden="true"></span>
-            </button>
-            <button class="card" type="button" data-option="3">
-              <span class="card__index">03</span>
-              <span class="card__text" data-text="option3"></span>
-              <span class="card__glow" aria-hidden="true"></span>
-            </button>
-          </div>
-        </div>
+      <div class="reveal video-overlay" data-reveal="video2-next">
+        <button id="video2-next" class="btn btn--cta btn--xl ripple" type="button">Continue</button>
       </div>
     </section>
 

@@ -521,17 +521,21 @@ class TextContent
     public string WelcomeBody { get; set; } =
         "This is a private, invitation-only page. You have been granted temporary access. To proceed, we require some information from you. Your information will remain private and will not be shared.";
     public string Video1Cta { get; set; } = "Continue to Next Video";
-    public string DecisionHeading { get; set; } = "Please choose which of the following is most appealing to you:";
+    public string DecisionHeading { get; set; } = "Please choose the option that best describes how you feel after viewing this presentation:";
     public string Option1 { get; set; } =
-        "I want to forget I ever watched this video, ignore everything I learned, and hope I never suffer the consequences.";
+        "This not only sounds like science fiction and too good to be true—it sounds like those responsible for this crackpot idea should be locked up in a loony bin, and they should throw away the key!";
     public string Option2 { get; set; } =
-        "I realize that unless I do something about it, my health may continue declining, but I choose to ignore it and hope I never suffer the consequences.";
+        "I think I understand the general idea behind this concept, but I don’t feel comfortable doing anything until a large portion of the population has already proven its validity.";
     public string Option3 { get; set; } =
-        "I will find a way to spend time in Radiant Waves, either by visiting a center, opening a center, or purchasing a system for my home or office to support my health and wellbeing.";
+        "This sounds like a miraculous breakthrough in modern science! I want to know what it feels like to have my 37 trillion tiny microscopic cellular batteries charged like when I was younger. I would also like the energy to support my immune system so it remains strong and resilient!";
     public string DisqualMessage { get; set; } =
-        "Thank you for taking the time to learn more about Radiant Wave Technologies. We appreciate your interest and wish you and your family the very best. Unfortunately, your selection does not qualify you to proceed further.";
+        "Thank you for visiting our site. We wish you and your family the very best. Unfortunately, you are not qualified to proceed.";
+    public string DisqualMessage2 { get; set; } =
+        "Thank you for visiting our site. We wish you and your family the very best. We will contact you in the future using the email address you provided once a large portion of the population has proven the validity of Radiant Wave Technologies. However, at this time, you are not qualified to proceed.";
+    public string KcCongrats { get; set; } =
+        "Congratulations! You have been granted access to the next presentation.";
     public string CongratsMessage { get; set; } =
-        "Choosing Option #3 shows that you are earnest, insightful, decisive, and deeply value health, wellbeing, vitality, and longevity. Before continuing, please answer the following questions.";
+        "Before continuing to the final presentation, please answer the following two questions.";
     public string ValuationQ1 { get; set; } =
         "What value do you place on your own health, wellbeing, vitality, and longevity?";
     public string ValuationQ2 { get; set; } =

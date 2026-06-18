@@ -1,8 +1,9 @@
 # Radiant Wave Technologies — Interactive Video Qualification App
 
 A premium, single-page, cinematic web application that guides prospects through a
-gated video experience: **register → Video 1 → Video 2 + decision → (disqualify |
-qualify) → Video 3 → redirect**. Includes a hidden admin panel for videos, timings,
+gated video experience: **register → Video 1 → knowledge check + qualification →
+(disqualify | qualify) → Video 2 → valuation questions → Video 3 → redirect**.
+Includes a hidden admin panel for videos, timings,
 copy, and funnel analytics.
 
 Built as a self-contained **ASP.NET Core 8** app (no external NuGet packages) with a
@@ -100,9 +101,16 @@ edit `wwwroot/js/config.js` (and the files in `videos/`) and redeploy.
   option cards. It does **not** allow skipping ahead to other application states.
 
 ### Branching
-- Option 1 / Option 2 → **Disqualification** end screen.
-- Option 3 → **Qualification** (congrats + two valuation questions, both required) →
-  Video 3 → final CTA → redirect.
+After Video 1 pauses, a **knowledge check** (3 multiple-choice questions, each must be
+answered correctly to advance) leads into the **qualification** ("how do you feel")
+decision:
+- Feeling Option 1 / Option 2 → **Disqualification** end screen (each shows its own
+  message: `disqualMessage` / `disqualMessage2`).
+- Feeling Option 3 → **Qualified** (`kcCongrats`) → Video 2 → two valuation questions
+  (both required) → Video 3 → final CTA → redirect.
+
+The knowledge-check question text and correct answers live in
+`wwwroot/index.html` (the `data-correct` attribute marks the right option).
 
 ---
 
@@ -115,8 +123,8 @@ apply immediately. Short test clips and long production videos are both supporte
 hardcoded durations.
 
 ### Timings (seconds after a video starts)
-- Video 1 — show Continue button (default **5**)
-- Video 2 — show option cards (default **7**)
+- Video 1 — show knowledge check + qualification (default **10**)
+- Video 2 — show Continue button (default **7**)
 - Video 3 — show final CTA (default **5**)
 
 Stored in seconds, e.g. `590` = 9m 50s. Changes apply immediately to new sessions.
