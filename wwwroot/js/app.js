@@ -10,6 +10,7 @@
     config: null,
     players: {},
     selections: { q1: null, q2: null, q3: null },
+    user: null,
   };
 
   // ---- helpers ----------------------------------------------
@@ -33,6 +34,15 @@
       const val = cfg.text && cfg.text[key];
       if (val != null && val !== "") el.textContent = val;
     });
+  }
+
+  // Personalize the experience with the registrant's first name (passed through
+  // the /enter redirect by GHL). textContent keeps it XSS-safe.
+  function applyGreeting() {
+    if (!App.user || !App.user.fname) return;
+    $$('[data-user="fname"]').forEach((el) => { el.textContent = App.user.fname; });
+    const g = $(".teaser__greeting");
+    if (g) g.hidden = false;
   }
 
   function attachRipple(btn) {
@@ -258,9 +268,27 @@
   function finalRedirect() {
     track("video3_complete");
     track("final_cta_click");
-    const url = (App.config && App.config.redirectUrl) || "https://radiantwave-3d.vercel.app/";
-    // allow the event to flush
-    setTimeout(() => { window.location.href = url; }, 220);
+
+    const fallback = (App.config && App.config.redirectUrl) || "https://radiantwave-3d.vercel.app/";
+    let done = false;
+    const go = (url) => { if (done) return; done = true; window.location.href = url || fallback; };
+
+    // Tell the backend the funnel is complete. The function reads the user's
+    // email from the signed session cookie and updates their GHL contact
+    // (video_completed, ready_for_booking, …), then returns the booking URL.
+    // On a static deploy (no backend) this 404s and we fall back to redirectUrl.
+    fetch("/api/complete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: "{}",
+      keepalive: true,
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => go(d && d.bookingUrl))
+      .catch(() => go());
+
+    // Safety net: never leave the user stuck if the call hangs.
+    setTimeout(() => go(), 2500);
   }
 
   function videoUrl(n) {
@@ -441,6 +469,10 @@
     // Resume at Video 1 if we arrived via the GHL post-submit redirect.
     const params = new URLSearchParams(location.search);
     const resuming = params.get("begin") === "1" || location.hash.replace("#", "") === "begin";
+
+    // First name passed through the /enter redirect → greet the user on Video 1.
+    const fname = (params.get("fname") || "").trim().slice(0, 60);
+    if (fname) { App.user = { fname }; applyGreeting(); }
     const loader = $("#loader");
 
     if (resuming) {
