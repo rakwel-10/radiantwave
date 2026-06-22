@@ -32,16 +32,16 @@ attribution**, and never exposes the GHL API key to the browser. It runs on **Cl
 | `BOOKING_URL` | Where to send users after completion (your GHL booking/calendar page). |
 | `GHL_API_TOKEN` | GHL **Private Integration** token (contacts read/write). |
 | `GHL_LOCATION_ID` | Your GHL location (sub-account) ID. |
-| `GHL_CF_VIDEO_COMPLETED` | Custom-field **ID** for `video_completed`. |
-| `GHL_CF_READY_FOR_BOOKING` | Custom-field **ID** for `ready_for_booking`. |
-| `GHL_CF_VIDEO_COMPLETED_AT` | Custom-field **ID** for `video_completed_at`. |
+| `GHL_CF_VIDEO_COMPLETED` | Custom-field **key** for `video_completed` (e.g. `video_completed`). |
+| `GHL_CF_READY_FOR_BOOKING` | Custom-field **key** for `ready_for_booking`. |
+| `GHL_CF_VIDEO_COMPLETED_AT` | Custom-field **key** for `video_completed_at`. |
 
 Generate secrets with e.g. `openssl rand -hex 32` (or any long random string).
 
 ## 3) GoHighLevel setup
-1. **Custom fields** (Settings → Custom Fields) — create and note each field's **ID**:
-   - `video_completed` (checkbox/text), `ready_for_booking` (checkbox/text),
-     `affiliate_name` (text), `video_completed_at` (date or text).
+1. **Custom fields** (Settings → Custom Fields) — create each as **Text**, and note each field's
+   **Unique Key** (the value shown in the GHL UI, e.g. `video_completed`):
+   - `video_completed`, `ready_for_booking`, `affiliate_name`, `video_completed_at`.
 2. **Private Integration token** (Settings → Private Integrations): create with **contacts
    read/write**; copy the token. Note your **Location ID** (Settings → Business profile / URL).
 3. **Affiliate capture:** in the registration form, add a **hidden field** bound to
