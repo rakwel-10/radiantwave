@@ -978,6 +978,8 @@ body.legal-open { overflow: hidden; }
 .legal-modal__body h3 { color: #eaf6fb; font-size: 16px; margin: 10px 0 4px; }
 .legal-modal__body h4 { color: #eaf6fb; font-size: 14.5px; margin: 18px 0 4px; }
 .legal-modal__body .legal-meta { color: var(--text-dim); font-size: 12.5px; margin: 0 0 12px; }
+.legal-modal__body ul { margin: 6px 0 10px; padding-left: 20px; }
+.legal-modal__body li { margin: 3px 0; }
 
 /* ---------------- Cinematic sweep transition ---------------- */
 .sweep {
