@@ -103,6 +103,20 @@
     if (el) el.classList.add("is-shown");
   }
 
+  // ---- legal popups (Terms / Privacy) -----------------------
+  function openLegal(which) {
+    const m = $(`.legal-modal[data-legal="${which}"]`);
+    if (!m) return;
+    m.hidden = false;
+    document.body.classList.add("legal-open");
+    const panel = m.querySelector(".legal-modal__panel");
+    if (panel) panel.scrollTop = 0;
+  }
+  function closeLegal() {
+    $$(".legal-modal").forEach((m) => { m.hidden = true; });
+    document.body.classList.remove("legal-open");
+  }
+
   // ---- video helpers ----------------------------------------
   function preload(url) {
     try {
@@ -126,15 +140,13 @@
     transitionTo("video1", () => { App.players.v1.preview(5); preload(videoUrl(2)); });
   }
 
-  // Resume directly at the teaser (used when arriving via the GHL post-submit
-  // redirect). Switches screens without the welcome flash.
-  function jumpToVideo1Immediate() {
+  // Show the agreement gate immediately (used when arriving via the GHL
+  // post-submit redirect). Switches screens without the welcome flash.
+  function showAgreementImmediate() {
     const cur = $(".screen--active");
     if (cur) cur.classList.remove("screen--active");
-    const v1 = $('[data-screen="video1"]');
-    if (v1) v1.classList.add("screen--active");
-    App.players.v1.preview(5);
-    preload(videoUrl(2));
+    const ag = $('[data-screen="agreement"]');
+    if (ag) ag.classList.add("screen--active");
   }
 
   function enterVideo2() {
@@ -345,6 +357,32 @@
     // Disqualified -> back to home (full reset)
     $("#back-home").addEventListener("click", () => { window.location.href = "/"; });
 
+    // Agreement gate (before video 1): both boxes required to continue.
+    const agEq = $("#agree-equinox");
+    const agTos = $("#agree-terms");
+    const agCont = $("#agree-continue");
+    if (agEq && agTos && agCont) {
+      const refresh = () => { agCont.disabled = !(agEq.checked && agTos.checked); };
+      agEq.addEventListener("change", refresh);
+      agTos.addEventListener("change", refresh);
+      agCont.addEventListener("click", () => { if (!agCont.disabled) startVideo1(); });
+      refresh();
+    }
+
+    // Legal popups (Terms / Privacy). stopPropagation so the link inside the
+    // <label> doesn't also toggle the checkbox.
+    $$("[data-open-legal]").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openLegal(btn.getAttribute("data-open-legal"));
+      });
+    });
+    $$("[data-close-legal]").forEach((el) => {
+      el.addEventListener("click", () => closeLegal());
+    });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLegal(); });
+
     // Ripples
     $$(".ripple, .btn--cta").forEach(attachRipple);
   }
@@ -413,8 +451,8 @@
       started = true;
       track("registration");
       if (window.RadiantWaves) window.RadiantWaves.pulse();
-      if (opts && opts.immediate) jumpToVideo1Immediate(opts.deferPlay);
-      else startVideo1();
+      if (opts && opts.immediate) showAgreementImmediate();
+      else transitionTo("agreement");
     };
     beginBtn.addEventListener("click", () => begin());
     App.startExperience = begin; // allow boot() to resume after a form redirect
