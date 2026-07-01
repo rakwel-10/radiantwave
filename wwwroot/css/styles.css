@@ -673,29 +673,44 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
 
 .card {
   position: relative;
-  text-align: left;
+  text-align: center;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
   border: 1px solid var(--accent-line);
   border-radius: 18px;
-  padding: 22px 20px;
+  padding: 26px 22px;
   color: #e9f4fa;
   cursor: pointer;
   overflow: hidden;
-  min-height: 168px;
+  min-height: 150px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
   transition: transform 0.35s var(--ease), border-color 0.35s var(--ease), box-shadow 0.35s var(--ease), background 0.35s var(--ease);
 }
 .card__index {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
   font-family: var(--font);
   font-weight: 700;
-  font-size: 13px;
-  letter-spacing: 2px;
+  font-size: 14px;
+  letter-spacing: 1px;
   color: var(--accent);
-  opacity: 0.85;
+  background: rgba(41, 182, 230, 0.12);
+  border: 1px solid var(--accent-line);
+  transition: color 0.35s var(--ease), background 0.35s var(--ease), border-color 0.35s var(--ease);
 }
-.card__text { font-size: 14.5px; line-height: 1.5; color: #dceef7; }
+.card__text {
+  font-family: var(--font);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #eaf6fb;
+}
 .card__glow {
   position: absolute;
   inset: -40% -10% auto -10%;
@@ -717,23 +732,22 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
   background: linear-gradient(180deg, rgba(255, 130, 85, 0.16), rgba(255, 130, 85, 0.05));
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45), 0 0 34px rgba(255, 130, 85, 0.45);
 }
-.card.is-selected .card__index { color: var(--cta); }
+.card.is-selected .card__index { color: #fff; background: rgba(255, 130, 85, 0.9); border-color: var(--cta); }
 /* Positive (qualifying) selection — e.g. feeling Option 3 lights up green. */
 .card.is-positive {
   border-color: #34d399;
   background: linear-gradient(180deg, rgba(52, 211, 153, 0.18), rgba(52, 211, 153, 0.05));
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45), 0 0 34px rgba(52, 211, 153, 0.45);
 }
-.card.is-positive .card__index { color: #34d399; }
+.card.is-positive .card__index { color: #06120c; background: #34d399; border-color: #34d399; }
 .card.is-locked { pointer-events: none; }
 .card.is-dim { opacity: 0.4; filter: grayscale(0.4); }
 
-/* value cards */
+/* value cards — compact, label-only */
 .card--value {
-  min-height: 96px;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  min-height: 92px;
+  padding: 16px 12px;
+  gap: 0;
 }
 .card--value .card__text { font-family: var(--font); font-weight: 700; font-size: 20px; color: #fff; }
 

@@ -277,10 +277,11 @@
 
     setTimeout(() => {
       if (num === 3) {
-        // Qualified → congratulations, then continue to The Why.
+        // Qualified → congratulations (with confetti), then continue to The Why.
         const kc = $('[data-reveal="knowledge-check"]');
         if (kc) kc.classList.remove("is-shown");
         showReveal("kc-pass");
+        confettiBurst();
       } else {
         const t = App.config.text || {};
         enterDisqualified(num === 2 ? t.disqualMessage2 : t.disqualMessage);
