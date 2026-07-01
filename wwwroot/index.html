@@ -86,7 +86,6 @@
 
           <!-- Q1 -->
           <div class="qcard kc-q" data-kc-step="1">
-            <span class="question__num">Question 1</span>
             <h3 class="question__label">Who was the first to discover the bioelectric field?</h3>
             <div class="kc-options" data-kc-group="1">
               <button class="kc-opt" type="button">Thomas Edison</button>
@@ -96,26 +95,13 @@
             </div>
           </div>
 
-          <!-- Final step: how do you feel? -->
+          <!-- Final step: how do you feel? (same row style as Q1) -->
           <div class="qcard kc-feeling is-collapsed" data-kc-step="feeling">
-            <span class="question__num">Final Step</span>
-            <h3 class="question__label" data-text="decisionHeading">Please choose the option that best describes how you feel after viewing this presentation:</h3>
-            <div class="cards cards--3">
-              <button class="card" type="button" data-kc-option="1">
-                <span class="card__index">01</span>
-                <span class="card__text" data-text="option1"></span>
-                <span class="card__glow" aria-hidden="true"></span>
-              </button>
-              <button class="card" type="button" data-kc-option="2">
-                <span class="card__index">02</span>
-                <span class="card__text" data-text="option2"></span>
-                <span class="card__glow" aria-hidden="true"></span>
-              </button>
-              <button class="card" type="button" data-kc-option="3">
-                <span class="card__index">03</span>
-                <span class="card__text" data-text="option3"></span>
-                <span class="card__glow" aria-hidden="true"></span>
-              </button>
+            <h3 class="question__label" data-text="decisionHeading">Which option best describes how you feel?</h3>
+            <div class="kc-feeling-options">
+              <button class="kc-opt" type="button" data-kc-option="1" data-text="option1"></button>
+              <button class="kc-opt" type="button" data-kc-option="2" data-text="option2"></button>
+              <button class="kc-opt" type="button" data-kc-option="3" data-text="option3"></button>
             </div>
           </div>
         </div>

@@ -889,6 +889,20 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
   background: linear-gradient(180deg, rgba(248, 113, 113, 0.16), rgba(248, 113, 113, 0.04));
   color: #ffe4e4;
 }
+/* Final-step feeling options reuse the Q1 row style. */
+.kc-feeling-options { display: flex; flex-direction: column; gap: 12px; }
+.kc-opt.is-locked { pointer-events: none; }
+.kc-opt.is-dim { opacity: 0.4; filter: grayscale(0.4); }
+.kc-opt.is-selected {
+  border-color: var(--cta);
+  background: linear-gradient(180deg, rgba(255, 130, 85, 0.16), rgba(255, 130, 85, 0.05));
+  color: #fff;
+}
+.kc-opt.is-positive {
+  border-color: #34d399;
+  background: linear-gradient(180deg, rgba(52, 211, 153, 0.18), rgba(52, 211, 153, 0.05));
+  color: #eafff6;
+}
 .kc-shake { animation: kcShake 0.4s var(--ease) both; }
 @keyframes kcShake {
   10%, 90% { transform: translateX(-1px); }

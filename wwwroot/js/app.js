@@ -305,6 +305,7 @@
         showReveal("kc-pass");
         celebrate();
       } else {
+        playError();
         const t = App.config.text || {};
         enterDisqualified(num === 2 ? t.disqualMessage2 : t.disqualMessage);
       }
@@ -342,6 +343,7 @@
       if (letter === "C") {
         enterQualify();
       } else {
+        playError();
         const t = App.config.text || {};
         enterDisqualified(letter === "B" ? t.disqualB : t.disqualA);
       }
