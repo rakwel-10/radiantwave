@@ -667,9 +667,20 @@ h1, h2, h3 { font-family: var(--font); font-weight: 700; letter-spacing: -0.02em
 }
 
 .cards { display: grid; gap: 16px; }
-.cards--3 { grid-template-columns: repeat(3, 1fr); }
+.cards--3 { grid-template-columns: 1fr; max-width: 620px; margin-inline: auto; gap: 14px; }
 .cards--4 { grid-template-columns: repeat(4, 1fr); }
 .cards--8 { grid-template-columns: repeat(4, 1fr); }
+/* Stacked choice cards (feeling / decision questions) render as a vertical list. */
+.cards--3 .card {
+  min-height: 0;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  padding: 20px 24px;
+  gap: 18px;
+}
+.cards--3 .card__index { flex: none; }
 
 .card {
   position: relative;
