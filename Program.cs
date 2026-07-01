@@ -527,13 +527,10 @@ class TextContent
     public string WelcomeBody { get; set; } =
         "This is a private, invitation-only page. You have been granted temporary access. To proceed, we require some information from you. Your information will remain private and will not be shared.";
     public string Video1Cta { get; set; } = "Continue to Next Video";
-    public string DecisionHeading { get; set; } = "Please choose the option that best describes how you feel after viewing this presentation:";
-    public string Option1 { get; set; } =
-        "This not only sounds like science fiction and too good to be true—it sounds like those responsible for this crackpot idea should be locked up in a loony bin, and they should throw away the key!";
-    public string Option2 { get; set; } =
-        "I think I understand the general idea behind this concept, but I don’t feel comfortable doing anything until a large portion of the population has already proven its validity.";
-    public string Option3 { get; set; } =
-        "This sounds like a miraculous breakthrough in modern science! I want to know what it feels like to have my 37 trillion tiny microscopic cellular batteries charged like when I was younger. I would also like the energy to support my immune system so it remains strong and resilient!";
+    public string DecisionHeading { get; set; } = "Which option best describes how you feel?";
+    public string Option1 { get; set; } = "Science Fiction";
+    public string Option2 { get; set; } = "Skeptical";
+    public string Option3 { get; set; } = "Miraculous Breakthrough";
     public string DisqualMessage { get; set; } =
         "Thank you for visiting our site. We wish you and your family the very best. Unfortunately, you are not qualified to proceed.";
     public string DisqualMessage2 { get; set; } =
@@ -542,22 +539,17 @@ class TextContent
         "Congratulations! You have been granted access to the next presentation.";
     public string Decision2Lead { get; set; } =
         "Since our environment on Earth has become increasingly stressful and overloaded with pollutants, toxins, carcinogens, heavy metals, microplastics, radiation, and free radicals—all of which are nearly impossible to avoid unless we somehow colonize another planet—we are faced with a choice.";
-    public string Decision2Prompt { get; set; } =
-        "Please select the option below that best describes your decision:";
-    public string OptionA { get; set; } =
-        "I want to forget I ever watched this presentation, ignore everything I learned, and hope I never suffer the consequences.";
-    public string OptionB { get; set; } =
-        "I realize that unless I do something about the toxins I absorb, the degradation of my 37 trillion microscopic “cellular” batteries, and the ongoing assault of free radicals, my immune system may continue to weaken. Eventually, my body may no longer have the energy to fend off or eliminate germs, bacteria, viruses, and other ailments, nor effectively resist premature aging and age-related degenerative diseases. Even so, I choose to ignore it all and hope I never suffer the consequences.";
-    public string OptionC { get; set; } =
-        "I will find a way to spend time in Radiant Waves—whether by visiting a center, opening a center, or purchasing a system for my home or office. I want to use this exclusive technology to recharge my 37 trillion microscopic “cellular” batteries, increase my production of cellular electricity, strengthen my immune system, and improve both my and my family’s ability to fend off germs, bacteria, viruses, and other ailments, while aging gracefully and potentially reducing the impact of age-related degenerative diseases.";
+    public string Decision2Prompt { get; set; } = "Which best describes how you feel?";
+    public string OptionA { get; set; } = "I wish you didn’t tell me";
+    public string OptionB { get; set; } = "Still skeptical";
+    public string OptionC { get; set; } = "Tell me more";
     public string DisqualA { get; set; } =
         "We appreciate you taking the time to learn more about Radiant Wave Technologies and wish you and your family the very best. Unfortunately, your choice of Option A disqualifies you from proceeding further.";
     public string DisqualB { get; set; } =
         "We appreciate you taking the time to learn more about Radiant Wave Technologies. We are glad you acknowledge the unhealthy environment in which we live and hope that one day you will recognize the value of Radiant Wave Technology. We wish you and your family the very best. Unfortunately, your choice of Option B disqualifies you from proceeding further.";
-    public string CongratsMessage { get; set; } =
-        "Choosing Option C shows that you are earnest, insightful, decisive, and that you value your health, wellbeing, vitality, and longevity—as well as that of your family. Your decision qualifies you to view the next presentation, which will reveal the true mission and purpose of Radiant Wave Technologies. Before proceeding, please answer the following:";
+    public string CongratsMessage { get; set; } = "Before you go…";
     public string ValuationQ1 { get; set; } =
-        "What value do you place on YOUR health, wellbeing, vitality, and longevity?";
+        "What value do you place on your health, well-being, and vitality?";
     public string ValuationQ2 { get; set; } =
         "What value do you place on the health, wellbeing, vitality, and longevity of YOUR FAMILY and LOVED ONES?";
     public string ValuationQ3 { get; set; } =

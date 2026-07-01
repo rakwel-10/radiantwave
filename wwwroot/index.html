@@ -58,31 +58,6 @@
       </div>
     </section>
 
-    <!-- ============================ AGREEMENT (before video 1) ============================ -->
-    <section class="screen" data-screen="agreement">
-      <div class="agreement">
-        <span class="qualify__eyebrow">One last step</span>
-        <h2 class="agreement__title">Before you begin</h2>
-        <p class="agreement__intro">Please confirm the following to continue to the presentation.</p>
-
-        <label class="agree-check">
-          <input type="checkbox" id="agree-equinox" />
-          <span class="agree-check__text">I was involved in Equinox International.</span>
-        </label>
-
-        <label class="agree-check">
-          <input type="checkbox" id="agree-terms" />
-          <span class="agree-check__text">I agree to the Radiant Wave Technologies
-            <button type="button" class="link-btn" data-open-legal="tos">Terms of Service</button>
-            and
-            <button type="button" class="link-btn" data-open-legal="privacy">Privacy Policy</button>.
-          </span>
-        </label>
-
-        <button id="agree-continue" class="btn btn--cta btn--xl ripple" type="button" disabled>Continue</button>
-      </div>
-    </section>
-
     <!-- ============================ VIDEO 1 ============================ -->
     <section class="screen" data-screen="video1">
       <div class="teaser" id="teaser-1">
@@ -106,13 +81,13 @@
       <!-- Knowledge check + qualification gate (replaces the old "Next Video" button). -->
       <div class="reveal video-overlay video-overlay--wide knowledge-check" data-reveal="knowledge-check">
         <div class="kc__panel">
-          <h2 class="kc__title">Knowledge Check &amp; Qualification</h2>
-          <p class="kc__lead">Please choose the correct answer to the following questions.</p>
+          <h2 class="kc__title">Comprehension Quiz</h2>
+          <p class="kc__lead">Please choose the correct answer to continue.</p>
 
           <!-- Q1 -->
           <div class="qcard kc-q" data-kc-step="1">
-            <span class="question__num">Question 1 of 3</span>
-            <h3 class="question__label">Who discovered the &ldquo;Bioelectric Field&rdquo;?</h3>
+            <span class="question__num">Question 1</span>
+            <h3 class="question__label">Who was the first to discover the bioelectric field?</h3>
             <div class="kc-options" data-kc-group="1">
               <button class="kc-opt" type="button">Thomas Edison</button>
               <button class="kc-opt" type="button">Deepak Chopra</button>
@@ -121,31 +96,7 @@
             </div>
           </div>
 
-          <!-- Q2 -->
-          <div class="qcard kc-q is-collapsed" data-kc-step="2">
-            <span class="question__num">Question 2 of 3</span>
-            <h3 class="question__label">What did we <strong>NOT</strong> discover when we combined the discoveries of Luigi Galvani, Nikola Tesla, and Deepak Chopra?</h3>
-            <div class="kc-options" data-kc-group="2">
-              <button class="kc-opt" type="button">The health of our mitochondria determines our overall health</button>
-              <button class="kc-opt" type="button" data-correct="true">They are all Nobel Prize recipients</button>
-              <button class="kc-opt" type="button">Human cells run on electricity</button>
-              <button class="kc-opt" type="button">Human cells can be affected by outside sources</button>
-            </div>
-          </div>
-
-          <!-- Q3 -->
-          <div class="qcard kc-q is-collapsed" data-kc-step="3">
-            <span class="question__num">Question 3 of 3</span>
-            <h3 class="question__label">What did scientists discover is the cause of aging and age-related degenerative diseases?</h3>
-            <div class="kc-options" data-kc-group="3">
-              <button class="kc-opt" type="button">Lack of deep, restful sleep</button>
-              <button class="kc-opt" type="button" data-correct="true">Reduced ability of mitochondria to produce and store adequate electricity</button>
-              <button class="kc-opt" type="button">High levels of stress</button>
-              <button class="kc-opt" type="button">Pollutants in our environment</button>
-            </div>
-          </div>
-
-          <!-- Final step: how do you feel? (qualification decision, moved up from video 2) -->
+          <!-- Final step: how do you feel? -->
           <div class="qcard kc-feeling is-collapsed" data-kc-step="feeling">
             <span class="question__num">Final Step</span>
             <h3 class="question__label" data-text="decisionHeading">Please choose the option that best describes how you feel after viewing this presentation:</h3>
@@ -204,8 +155,7 @@
       <!-- Decision after video 2: the toxins/environment choice (A / B / C). -->
       <div class="reveal video-overlay video-overlay--wide decision" data-reveal="video2-decision">
         <div class="decision__panel">
-          <p class="decision__lead" data-text="decision2Lead"></p>
-          <h2 class="decision__heading" data-text="decision2Prompt">Please select the option below that best describes your decision:</h2>
+          <h2 class="decision__heading" data-text="decision2Prompt">Which best describes how you feel?</h2>
           <div class="cards cards--3">
             <button class="card" type="button" data-decision2="A">
               <span class="card__index">A</span>
@@ -244,44 +194,12 @@
     <!-- ============================ QUALIFY (congrats + valuation) ============================ -->
     <section class="screen" data-screen="qualify">
       <div class="qualify">
-        <span class="qualify__eyebrow">You're Qualified</span>
-        <h2 class="qualify__title">Congratulations!</h2>
+        <h2 class="qualify__title">Congratulations</h2>
         <p class="qualify__intro" data-text="congratsMessage"></p>
 
         <div class="question qcard" data-question="1">
-          <span class="question__num">Question 1 of 3</span>
           <h3 class="question__label" data-text="valuationQ1"></h3>
           <div class="cards cards--8 value-cards" data-value-group="q1">
-            <button class="card card--value" type="button" data-value="$1"><span class="card__text">$1</span><span class="card__glow" aria-hidden="true"></span></button>
-            <button class="card card--value" type="button" data-value="$10"><span class="card__text">$10</span><span class="card__glow" aria-hidden="true"></span></button>
-            <button class="card card--value" type="button" data-value="$100"><span class="card__text">$100</span><span class="card__glow" aria-hidden="true"></span></button>
-            <button class="card card--value" type="button" data-value="$1,000"><span class="card__text">$1,000</span><span class="card__glow" aria-hidden="true"></span></button>
-            <button class="card card--value" type="button" data-value="$10,000"><span class="card__text">$10,000</span><span class="card__glow" aria-hidden="true"></span></button>
-            <button class="card card--value" type="button" data-value="$100,000"><span class="card__text">$100,000</span><span class="card__glow" aria-hidden="true"></span></button>
-            <button class="card card--value" type="button" data-value="$1,000,000"><span class="card__text">$1,000,000</span><span class="card__glow" aria-hidden="true"></span></button>
-            <button class="card card--value" type="button" data-value="Priceless"><span class="card__text">PRICELESS</span><span class="card__glow" aria-hidden="true"></span></button>
-          </div>
-        </div>
-
-        <div class="question qcard is-collapsed" data-question="2">
-          <span class="question__num">Question 2 of 3</span>
-          <h3 class="question__label" data-text="valuationQ2"></h3>
-          <div class="cards cards--8 value-cards" data-value-group="q2">
-            <button class="card card--value" type="button" data-value="$1"><span class="card__text">$1</span><span class="card__glow" aria-hidden="true"></span></button>
-            <button class="card card--value" type="button" data-value="$10"><span class="card__text">$10</span><span class="card__glow" aria-hidden="true"></span></button>
-            <button class="card card--value" type="button" data-value="$100"><span class="card__text">$100</span><span class="card__glow" aria-hidden="true"></span></button>
-            <button class="card card--value" type="button" data-value="$1,000"><span class="card__text">$1,000</span><span class="card__glow" aria-hidden="true"></span></button>
-            <button class="card card--value" type="button" data-value="$10,000"><span class="card__text">$10,000</span><span class="card__glow" aria-hidden="true"></span></button>
-            <button class="card card--value" type="button" data-value="$100,000"><span class="card__text">$100,000</span><span class="card__glow" aria-hidden="true"></span></button>
-            <button class="card card--value" type="button" data-value="$1,000,000"><span class="card__text">$1,000,000</span><span class="card__glow" aria-hidden="true"></span></button>
-            <button class="card card--value" type="button" data-value="Priceless"><span class="card__text">PRICELESS</span><span class="card__glow" aria-hidden="true"></span></button>
-          </div>
-        </div>
-
-        <div class="question qcard is-collapsed" data-question="3">
-          <span class="question__num">Question 3 of 3</span>
-          <h3 class="question__label" data-text="valuationQ3"></h3>
-          <div class="cards cards--8 value-cards" data-value-group="q3">
             <button class="card card--value" type="button" data-value="$1"><span class="card__text">$1</span><span class="card__glow" aria-hidden="true"></span></button>
             <button class="card card--value" type="button" data-value="$10"><span class="card__text">$10</span><span class="card__glow" aria-hidden="true"></span></button>
             <button class="card card--value" type="button" data-value="$100"><span class="card__text">$100</span><span class="card__glow" aria-hidden="true"></span></button>
@@ -325,130 +243,6 @@
   </main>
 
   <footer class="app-foot">© 2026 Radiant Wave Technologies. All rights reserved.</footer>
-
-  <!-- ============================ LEGAL POPUPS ============================ -->
-  <div class="legal-modal" data-legal="tos" hidden>
-    <div class="legal-modal__backdrop" data-close-legal></div>
-    <div class="legal-modal__panel" role="dialog" aria-modal="true" aria-label="Terms of Service">
-      <button class="legal-modal__close" type="button" data-close-legal aria-label="Close">&#10005;</button>
-      <h2 class="legal-modal__title">Terms of Service</h2>
-      <div class="legal-modal__body">
-        <h3>RADIANT WAVE TECHNOLOGIES TERMS OF SERVICE</h3>
-        <p class="legal-meta">Last Updated: June 7, 2025</p>
-        <p>These terms of service ("Terms") apply to your access and use of the Radiant Wave Technologies website and related services (the "Service"). Please read them carefully.</p>
-
-        <h4>Accepting These Terms</h4>
-        <p>If you access or use the Service, it means you agree to be bound by all of the terms below. So, before you use the Service, please read all of the terms. If you don't agree to all of the terms below, please do not use the Service. Also, if a term does not make sense to you, please let us know by emailing info@radiantwavetech.com.</p>
-
-        <h4>Changes to These Terms</h4>
-        <p>We reserve the right to modify these Terms at any time. For instance, we may need to change these Terms if we come out with a new feature or for some other reason.</p>
-        <p>Whenever we make changes to these Terms, the changes are effective 7 days after we post such revised Terms (indicated by revising the date at the top of these Terms) or upon your acceptance if we provide a mechanism for your immediate acceptance of the revised Terms (such as a click-through confirmation or acceptance button). It is your responsibility to check this website for changes to these Terms.</p>
-        <p>If you continue to use the Service after the revised Terms go into effect, then you have accepted the changes to these Terms.</p>
-
-        <h4>Privacy Policy</h4>
-        <p>For information about how we collect and use information about users of the Service, please review our Privacy Policy, available on this website.</p>
-
-        <h4>Third-Party Services</h4>
-        <p>From time to time, we may provide you with links to third party websites or services that we do not own or control. Your use of the Service may also include the use of applications that are developed or owned by a third party. Your use of such third party applications, websites, and services is governed by that party's own terms of service or privacy policies. We encourage you to read the terms and conditions and privacy policy of any third party application, website, or service that you visit or use.</p>
-
-        <h4>Form Submissions</h4>
-        <p>You do not need to create an account to use this Service. By submitting the interest form, you are providing us with your contact information voluntarily and consenting to the terms described in this agreement and our Privacy Policy.</p>
-
-        <h4>Communications Consent</h4>
-        <p>By submitting your contact information through this Service, you expressly consent to receive communications from us, including promotional emails and automated or pre-recorded SMS/text messages, at the email address and phone number you provided. Message and data rates may apply. You may opt out of SMS communications at any time by replying STOP. You may opt out of email communications by using the unsubscribe link included in any email.</p>
-
-        <h4>Your Use of the Service</h4>
-        <p>By submitting your information through this website, you confirm that the information you provide is accurate and complete. You agree not to submit false, misleading, or fraudulent information.</p>
-        <p>You acknowledge that by submitting the form, you are consenting to receive communications from us, including marketing emails and SMS/text messages related to our product and services. You may withdraw consent at any time using the opt-out mechanisms provided in those communications.</p>
-        <p>You agree not to use the Service in any way that violates applicable laws or regulations, or that could harm, disable, or impair the website or other users.</p>
-
-        <h4>Radiant Wave Technologies Materials</h4>
-        <p>We put a lot of effort into creating the Service including the logo and all designs, text, graphics, pictures, information, and other content. This property is owned by us or our licensors and it is protected by U.S. and international copyright laws. We grant you the right to use it.</p>
-        <p>However, unless we expressly state otherwise, your rights do not include: (i) publicly performing or publicly displaying the Service; (ii) modifying or otherwise making any derivative uses of the Service or any portion thereof; (iii) using any data mining, robots or similar data gathering or extraction methods; (iv) downloading (other than page caching) of any portion of the Service or any information contained therein; (v) reverse engineering or accessing the Service in order to build a competitive product or service; or (vi) using the Service other than for its intended purposes. If you do any of this, we may terminate your use of the Service.</p>
-
-        <h4>Hyperlinks and Third Party Content</h4>
-        <p>You may create a hyperlink to the Service. But you may not use, frame, or utilize framing techniques to enclose any of our trademarks, logos, or other proprietary information without our express written consent.</p>
-        <p>Radiant Wave Technologies makes no claim or representation regarding, and accepts no responsibility for, third party websites accessible by hyperlink from the Service or websites linking to the Service. When you leave the Service, you should be aware that these Terms and our policies no longer govern.</p>
-
-        <h4>Disclaimer of Warranties</h4>
-        <p>THE SERVICE AND ANY OTHER SERVICE AND CONTENT INCLUDED ON OR OTHERWISE MADE AVAILABLE TO YOU THROUGH THE SERVICE ARE PROVIDED TO YOU ON AN AS IS OR AS AVAILABLE BASIS WITHOUT ANY REPRESENTATIONS OR WARRANTIES OF ANY KIND. WE DISCLAIM ANY AND ALL WARRANTIES AND REPRESENTATIONS (EXPRESS OR IMPLIED, ORAL OR WRITTEN) WITH RESPECT TO THE SERVICE AND CONTENT INCLUDED ON OR OTHERWISE MADE AVAILABLE TO YOU THROUGH THE SERVICE WHETHER ALLEGED TO ARISE BY OPERATION OF LAW, BY REASON OF CUSTOM OR USAGE IN THE TRADE, BY COURSE OF DEALING OR OTHERWISE.</p>
-
-        <h4>Limitation of Liability</h4>
-        <p>IN NO EVENT WILL RADIANT WAVE TECHNOLOGIES BE LIABLE TO YOU OR ANY THIRD PARTY FOR ANY SPECIAL, INDIRECT, INCIDENTAL, EXEMPLARY OR CONSEQUENTIAL DAMAGES OF ANY KIND ARISING OUT OF OR IN CONNECTION WITH THE SERVICE OR ANY OTHER SERVICE AND/OR CONTENT INCLUDED ON OR OTHERWISE MADE AVAILABLE TO YOU THROUGH THE SERVICE, REGARDLESS OF THE FORM OF ACTION, WHETHER IN CONTRACT, TORT, STRICT LIABILITY OR OTHERWISE, EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES OR ARE AWARE OF THE POSSIBILITY OF SUCH DAMAGES. OUR TOTAL LIABILITY FOR ALL CAUSES OF ACTION AND UNDER ALL THEORIES OF LIABILITY WILL BE LIMITED TO THE AMOUNT YOU PAID TO RADIANT WAVE TECHNOLOGIES. THIS SECTION WILL BE GIVEN FULL EFFECT EVEN IF ANY REMEDY SPECIFIED IN THIS AGREEMENT IS DEEMED TO HAVE FAILED OF ITS ESSENTIAL PURPOSE.</p>
-        <p>You agree to defend, indemnify and hold us harmless from and against any and all costs, damages, liabilities, and expenses (including attorneys' fees, costs, penalties, interest and disbursements) we incur in relation to, arising from, or for the purpose of avoiding, any claim or demand from a third party relating to your use of the Service or the use of the Service by any person using your account, including any claim that your use of the Service violates any applicable law or regulation, or the rights of any third party, and/or your violation of these Terms.</p>
-
-        <h4>Governing Law</h4>
-        <p>The validity of these Terms and the rights, obligations, and relations of the parties under these Terms will be construed and determined under and in accordance with the laws of the State of Texas, without regard to conflicts of law principles.</p>
-
-        <h4>Jurisdiction</h4>
-        <p>You expressly agree that exclusive jurisdiction for any dispute with the Service or relating to your use of it resides in the courts of the State of Texas, and you further agree and expressly consent to the exercise of personal jurisdiction in the courts of the State of Texas located in Collin County in connection with any such dispute including any claim involving the Service. You further agree that you and Radiant Wave Technologies will not commence against the other a class action, class arbitration, or other representative action or proceeding.</p>
-
-        <h4>Termination</h4>
-        <p>If you breach any of these Terms, we have the right to suspend or disable your access to or use of the Service.</p>
-
-        <h4>Entire Agreement</h4>
-        <p>These Terms constitute the entire agreement between you and Radiant Wave Technologies regarding the use of the Service, superseding any prior agreements between you and Radiant Wave Technologies relating to your use of the Service.</p>
-
-        <h4>Feedback</h4>
-        <p>Please let us know what you think of the Service and these Terms. When you provide us with any feedback, comments, or suggestions about the Service or these Terms, you irrevocably assign to us all of your right, title, and interest in and to your feedback, comments, and suggestions.</p>
-
-        <h4>Questions and Contact Information</h4>
-        <p>Questions or comments about the Service may be directed to us at:</p>
-        <p>Radiant Wave Technologies<br />5605 FM 423, Suite 500-150<br />Frisco, TX 75036<br />United States</p>
-        <p>Email: info@radiantwavetech.com<br />Phone: (817) 864-1111</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="legal-modal" data-legal="privacy" hidden>
-    <div class="legal-modal__backdrop" data-close-legal></div>
-    <div class="legal-modal__panel" role="dialog" aria-modal="true" aria-label="Privacy Policy">
-      <button class="legal-modal__close" type="button" data-close-legal aria-label="Close">&#10005;</button>
-      <h2 class="legal-modal__title">Privacy Policy</h2>
-      <div class="legal-modal__body">
-        <h3>RADIANT WAVE TECHNOLOGIES PRIVACY POLICY</h3>
-        <p class="legal-meta">Effective: June 7, 2025</p>
-        <p>Radiant Wave Technologies takes your privacy seriously. To better protect your privacy, we provide this privacy policy notice explaining the way your personal information is collected and used.</p>
-
-        <h4>Collection of Routine Information</h4>
-        <p>This website tracks basic information about its visitors. This information includes, but is not limited to, IP addresses, browser details, timestamps, and referring pages. None of this information can personally identify specific visitors to this website. The information is tracked for routine administration and maintenance purposes.</p>
-
-        <h4>Collection of Personal Information</h4>
-        <p>When you submit our interest form, we collect personal information you provide directly, including:</p>
-        <ul>
-          <li>Full name</li>
-          <li>Email address</li>
-          <li>Phone number</li>
-          <li>State of residence</li>
-          <li>Your stated level of interest in our offering</li>
-        </ul>
-        <p>We collect this information to understand user interest, respond to inquiries, and provide relevant updates and marketing communications about our product and services. By submitting the form, you consent to receive communications from us, which may include email messages and SMS/text messages sent automatically based on the information you provided.</p>
-        <p>You may opt out of marketing communications at any time by following the unsubscribe instructions included in any email, or by replying STOP to any SMS message.</p>
-
-        <h4>Cookies</h4>
-        <p>This website doesn't use any cookies.</p>
-
-        <h4>Third Parties and Data Sharing</h4>
-        <p>We do not sell, rent, or trade your personal information to third parties. Information collected through this website is used solely for internal business purposes, including responding to your inquiries and sending relevant communications.</p>
-        <p>We may share your information with trusted third-party service providers (such as email delivery platforms or SMS messaging services) solely as necessary to operate our communications. These providers are contractually obligated to keep your information confidential and may not use it for their own purposes.</p>
-
-        <h4>Referral Tracking</h4>
-        <p>This website may use referral tracking links that allow existing users to share the site with others. If you arrive via a referral link, we may record that referral in order to attribute your sign-up to the referring user. No additional personal information about the referring user is shared with you, and vice versa.</p>
-
-        <h4>Security</h4>
-        <p>The security of your personal information is important to us, but remember that no method of transmission over the Internet, or method of electronic storage, is 100% secure. While we strive to use commercially acceptable means to protect your personal information, we cannot guarantee its absolute security.</p>
-
-        <h4>Changes to This Privacy Policy</h4>
-        <p>This Privacy Policy is effective as of June 7, 2025 and will remain in effect except with respect to any changes in its provisions in the future, which will be in effect immediately after being posted on this page.</p>
-        <p>We reserve the right to update or change our Privacy Policy at any time and you should check this Privacy Policy periodically. If we make any material changes to this Privacy Policy, we will notify you either through the email address you have provided us, or by placing a prominent notice on our website.</p>
-
-        <h4>Contact Information</h4>
-        <p>For any questions or concerns regarding this privacy policy, please contact us:</p>
-        <p>Radiant Wave Technologies<br />5605 FM 423, Suite 500-150<br />Frisco, TX 75036<br />United States</p>
-        <p>Email: info@radiantwavetech.com<br />Phone: (817) 864-1111</p>
-      </div>
-    </div>
-  </div>
 
   <div id="loader" class="loader">
     <div class="loader__bolt" aria-hidden="true">

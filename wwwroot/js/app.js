@@ -103,18 +103,78 @@
     if (el) el.classList.add("is-shown");
   }
 
-  // ---- legal popups (Terms / Privacy) -----------------------
-  function openLegal(which) {
-    const m = $(`.legal-modal[data-legal="${which}"]`);
-    if (!m) return;
-    m.hidden = false;
-    document.body.classList.add("legal-open");
-    const panel = m.querySelector(".legal-modal__panel");
-    if (panel) panel.scrollTop = 0;
+  // ---- celebration (correct quiz answer) --------------------
+  function celebrate() {
+    playChime();
+    confettiBurst();
   }
-  function closeLegal() {
-    $$(".legal-modal").forEach((m) => { m.hidden = true; });
-    document.body.classList.remove("legal-open");
+
+  // Short, pleasant success chime via Web Audio (no asset needed). Runs inside
+  // the click handler so the AudioContext is allowed to start.
+  function playChime() {
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      const ctx = new AC();
+      const now = ctx.currentTime;
+      [660, 880, 1320].forEach((f, i) => {
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = "triangle";
+        o.frequency.value = f;
+        const t0 = now + i * 0.09;
+        g.gain.setValueAtTime(0, t0);
+        g.gain.linearRampToValueAtTime(0.25, t0 + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.35);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(t0); o.stop(t0 + 0.4);
+      });
+      setTimeout(() => { try { ctx.close(); } catch (_) {} }, 1200);
+    } catch (_) {}
+  }
+
+  // Lightweight canvas confetti burst; self-removes after ~2s.
+  function confettiBurst() {
+    const canvas = document.createElement("canvas");
+    canvas.style.cssText = "position:fixed;inset:0;z-index:80;pointer-events:none";
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext("2d");
+    const colors = ["#29b6e6", "#7fe0ff", "#ff8255", "#34d399", "#a082ff", "#ffd166"];
+    const parts = [];
+    for (let i = 0; i < 150; i++) {
+      parts.push({
+        x: canvas.width / 2 + (Math.random() - 0.5) * 180,
+        y: canvas.height * 0.34 + (Math.random() - 0.5) * 60,
+        vx: (Math.random() - 0.5) * 11,
+        vy: Math.random() * -9 - 4,
+        g: 0.28 + Math.random() * 0.12,
+        size: 5 + Math.random() * 6,
+        color: colors[(Math.random() * colors.length) | 0],
+        rot: Math.random() * Math.PI,
+        vr: (Math.random() - 0.5) * 0.3,
+      });
+    }
+    const start = performance.now();
+    let raf;
+    function frame(now) {
+      const t = now - start;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      parts.forEach((p) => {
+        p.vy += p.g; p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.globalAlpha = Math.max(0, 1 - t / 1900);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+        ctx.restore();
+      });
+      if (t < 2000) raf = requestAnimationFrame(frame);
+      else { cancelAnimationFrame(raf); canvas.remove(); }
+    }
+    raf = requestAnimationFrame(frame);
   }
 
   // ---- video helpers ----------------------------------------
@@ -140,13 +200,15 @@
     transitionTo("video1", () => { App.players.v1.preview(5); preload(videoUrl(2)); });
   }
 
-  // Show the agreement gate immediately (used when arriving via the GHL
-  // post-submit redirect). Switches screens without the welcome flash.
-  function showAgreementImmediate() {
+  // Resume directly at Video 1 (used when arriving via the GHL post-submit
+  // redirect). Switches screens without the welcome flash.
+  function showVideo1Immediate() {
     const cur = $(".screen--active");
     if (cur) cur.classList.remove("screen--active");
-    const ag = $('[data-screen="agreement"]');
-    if (ag) ag.classList.add("screen--active");
+    const v1 = $('[data-screen="video1"]');
+    if (v1) v1.classList.add("screen--active");
+    App.players.v1.preview(5);
+    preload(videoUrl(2));
   }
 
   function enterVideo2() {
@@ -175,6 +237,7 @@
             group.classList.add("is-answered");
             opt.classList.add("is-correct");
             group.querySelectorAll(".kc-opt").forEach((b) => { b.disabled = true; });
+            celebrate();
             advanceKnowledgeCheck(group);
           } else {
             opt.classList.add("is-wrong");
@@ -189,11 +252,9 @@
     });
   }
 
-  // Reveal the next step (next question, or the final feeling decision).
-  function advanceKnowledgeCheck(group) {
-    const step = group.closest(".kc-q").getAttribute("data-kc-step");
-    const nextStep = step === "1" ? "2" : step === "2" ? "3" : "feeling";
-    const next = $(`.knowledge-check [data-kc-step="${nextStep}"]`);
+  // Only one knowledge question remains → reveal the final feelings step.
+  function advanceKnowledgeCheck() {
+    const next = $('.knowledge-check [data-kc-step="feeling"]');
     if (next && next.classList.contains("is-collapsed")) {
       setTimeout(() => {
         next.classList.remove("is-collapsed");
@@ -266,8 +327,6 @@
 
   function enterVideo3() {
     track("valuation_q1", App.selections.q1);
-    track("valuation_q2", App.selections.q2);
-    track("valuation_q3", App.selections.q3);
     track("qualification_complete");
 
     document.body.classList.add("atmo-energized");
@@ -342,8 +401,6 @@
           group.querySelectorAll(".card").forEach((c) => c.classList.remove("is-positive"));
           card.classList.add("is-positive");
           App.selections[q] = card.getAttribute("data-value");
-          if (q === "q1") revealQuestion(2);
-          else if (q === "q2") revealQuestion(3);
           maybeShowProceed();
         });
       });
@@ -357,50 +414,13 @@
     // Disqualified -> back to home (full reset)
     $("#back-home").addEventListener("click", () => { window.location.href = "/"; });
 
-    // Agreement gate (before video 1): both boxes required to continue.
-    const agEq = $("#agree-equinox");
-    const agTos = $("#agree-terms");
-    const agCont = $("#agree-continue");
-    if (agEq && agTos && agCont) {
-      const refresh = () => { agCont.disabled = !(agEq.checked && agTos.checked); };
-      agEq.addEventListener("change", refresh);
-      agTos.addEventListener("change", refresh);
-      agCont.addEventListener("click", () => { if (!agCont.disabled) startVideo1(); });
-      refresh();
-    }
-
-    // Legal popups (Terms / Privacy). stopPropagation so the link inside the
-    // <label> doesn't also toggle the checkbox.
-    $$("[data-open-legal]").forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        openLegal(btn.getAttribute("data-open-legal"));
-      });
-    });
-    $$("[data-close-legal]").forEach((el) => {
-      el.addEventListener("click", () => closeLegal());
-    });
-    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLegal(); });
-
     // Ripples
     $$(".ripple, .btn--cta").forEach(attachRipple);
   }
 
-  // Reveal the next valuation question once the previous is answered —
-  // one question at a time, in the same column.
-  function revealQuestion(num) {
-    const q = $(`.question[data-question="${num}"]`);
-    if (q && q.classList.contains("is-collapsed")) {
-      q.classList.remove("is-collapsed");
-      q.classList.add("q-reveal");
-      q.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
-  }
-
-  // Once all three valuation questions are answered, reveal the Proceed button.
+  // Once the valuation question is answered, reveal the Proceed button.
   function maybeShowProceed() {
-    if (App.selections.q1 && App.selections.q2 && App.selections.q3) {
+    if (App.selections.q1) {
       const wrap = $("#qualify-proceed-wrap");
       if (wrap && wrap.classList.contains("is-collapsed")) {
         wrap.classList.remove("is-collapsed");
@@ -451,8 +471,8 @@
       started = true;
       track("registration");
       if (window.RadiantWaves) window.RadiantWaves.pulse();
-      if (opts && opts.immediate) showAgreementImmediate();
-      else transitionTo("agreement");
+      if (opts && opts.immediate) showVideo1Immediate();
+      else startVideo1();
     };
     beginBtn.addEventListener("click", () => begin());
     App.startExperience = begin; // allow boot() to resume after a form redirect
