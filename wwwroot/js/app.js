@@ -133,6 +133,27 @@
     } catch (_) {}
   }
 
+  // Subtle low descending tone for a wrong answer.
+  function playError() {
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      const ctx = new AC();
+      const now = ctx.currentTime;
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = "sine";
+      o.frequency.setValueAtTime(300, now);
+      o.frequency.exponentialRampToValueAtTime(150, now + 0.18);
+      g.gain.setValueAtTime(0.0001, now);
+      g.gain.linearRampToValueAtTime(0.11, now + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+      o.connect(g); g.connect(ctx.destination);
+      o.start(now); o.stop(now + 0.3);
+      setTimeout(() => { try { ctx.close(); } catch (_) {} }, 700);
+    } catch (_) {}
+  }
+
   // Lightweight canvas confetti burst; self-removes after ~2s.
   function confettiBurst() {
     const canvas = document.createElement("canvas");
@@ -242,6 +263,7 @@
           } else {
             opt.classList.add("is-wrong");
             opt.classList.remove("kc-shake"); void opt.offsetWidth; opt.classList.add("kc-shake");
+            playError();
           }
         });
       });
@@ -281,7 +303,7 @@
         const kc = $('[data-reveal="knowledge-check"]');
         if (kc) kc.classList.remove("is-shown");
         showReveal("kc-pass");
-        confettiBurst();
+        celebrate();
       } else {
         const t = App.config.text || {};
         enterDisqualified(num === 2 ? t.disqualMessage2 : t.disqualMessage);
